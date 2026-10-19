@@ -123,8 +123,42 @@ export default function PostcardLandingPage() {
         justifyContent: "center",
         padding: "80px 16px 40px 16px",
         position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Ambient Blurred Cafe Background */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: "-28px",
+            backgroundImage: "url('/cafe.avif')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: "blur(18px) brightness(0.42) saturate(0.85)",
+            transform: "scale(1.08)",
+          }}
+        />
+        {/* Soft Vignette Overlay to ensure the postcard remains the primary focus */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(20, 16, 12, 0.45) 0%, rgba(10, 8, 6, 0.82) 100%)",
+          }}
+        />
+      </div>
+
       {/* Top Vintage Navigation Header */}
       <header
         className="desk-header"
@@ -205,6 +239,8 @@ export default function PostcardLandingPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
+          zIndex: 10,
         }}
       >
         <div className="postcard-wrapper">
