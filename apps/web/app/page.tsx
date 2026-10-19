@@ -139,13 +139,13 @@ export default function PostcardLandingPage() {
         <div
           style={{
             position: "absolute",
-            inset: "-28px",
+            inset: "-16px",
             backgroundImage: "url('/cafe.avif')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            filter: "blur(18px) brightness(0.42) saturate(0.85)",
-            transform: "scale(1.08)",
+            filter: "blur(6px) brightness(0.52) saturate(0.95)",
+            transform: "scale(1.04)",
           }}
         />
         {/* Soft Vignette Overlay to ensure the postcard remains the primary focus */}
