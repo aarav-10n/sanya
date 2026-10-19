@@ -90,6 +90,12 @@ export default function PostcardLandingPage() {
   const [addressLine1, setAddressLine1] = useState("To: The Curious Explorer");
   const [addressLine2, setAddressLine2] = useState("Via: React Web / App Monorepo");
   const [addressLine3, setAddressLine3] = useState("Loc: github.com/aarav-10n/sanya");
+  const [backMessage, setBackMessage] = useState(
+    "Postscript from Sanya:\n\n" +
+    "Every great idea begins with a clean sheet of paper. Here on the reverse of the card, thoughts flow without borders or constraints.\n\n" +
+    "You can write and edit this text freely. The typography matches the front letter in every detail — stamped in vintage typewriter ribbon ink directly into the paper fibers.\n\n" +
+    "— Sanya Studio, 2026"
+  );
 
   const cardInnerRef = useRef<HTMLDivElement>(null);
 
@@ -585,208 +591,75 @@ export default function PostcardLandingPage() {
             </div>
 
             {/* ============================================================== */}
-            {/* POSTCARD BACK: Authentic matching vintage paper effect         */}
+            {/* POSTCARD BACK: Exact matching vintage paper with editable body */}
             {/* ============================================================== */}
             <div
-              className="postcard-face postcard-front postcard-reverse-paper"
+              className="postcard-face postcard-front"
               style={{
                 position: "absolute",
                 inset: 0,
                 width: "100%",
                 height: "100%",
+                backgroundImage: "url('/postcard-back-clean.png')",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
                 color: "#271f18",
-                padding: "24px",
               }}
             >
-              {/* Outer double postal frame */}
+              {/* Warm Ambient Sheen matching front */}
               <div
                 style={{
                   position: "absolute",
-                  inset: "16px",
-                  border: "2px solid rgba(43, 31, 24, 0.5)",
-                  outline: "1px solid rgba(43, 31, 24, 0.3)",
-                  outlineOffset: "4px",
-                  borderRadius: "2px",
+                  inset: 0,
                   pointerEvents: "none",
+                  background:
+                    "radial-gradient(ellipse at 30% 25%, rgba(255, 245, 220, 0.12) 0%, transparent 60%)",
                 }}
               />
 
-              {/* Vintage Corner Postage Filigree */}
+              {/* Full Editable Text Body */}
               <div
-                className="typewriter-ink"
                 style={{
                   position: "absolute",
-                  top: "22px",
-                  left: "26px",
-                  fontSize: "12px",
-                  opacity: 0.5,
-                  letterSpacing: "1px",
-                }}
-              >
-                № 1926/2026
-              </div>
-
-              <div
-                className="typewriter-ink"
-                style={{
-                  position: "absolute",
-                  top: "22px",
-                  right: "26px",
-                  fontSize: "12px",
-                  opacity: 0.5,
-                  letterSpacing: "1px",
-                }}
-              >
-                SERIES • A
-              </div>
-
-              {/* Main Content Center */}
-              <div
-                style={{
+                  left: "7.5%",
+                  top: "10%",
+                  right: "7.5%",
+                  bottom: "10%",
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  maxWidth: "80%",
-                  zIndex: 2,
                 }}
               >
-                {/* Header in Typewriter Spaced Serif matching POSTCARD */}
-                <div
+                <textarea
+                  value={backMessage}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => {
+                    setBackMessage(e.target.value);
+                    playTypewriterSound();
+                  }}
+                  placeholder="Click here to type your notes or story..."
+                  spellCheck={false}
                   className="typewriter-ink"
                   style={{
-                    fontSize: "clamp(0.75rem, 1.8vw, 1.15rem)",
-                    letterSpacing: "0.3em",
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    resize: "none",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    lineHeight: 1.6,
                     color: "#271f18",
-                    textTransform: "uppercase",
-                    marginBottom: "10px",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
+                    overflowY: "auto",
+                    padding: 0,
+                    margin: 0,
+                    cursor: "text",
                   }}
-                >
-                  C A R T E   P O S T A L E
-                </div>
-
-                {/* Circular Stamped Postal Seal with Wavy Cancellation Lines */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "8px 0 14px 0",
-                    position: "relative",
-                  }}
-                >
-                  {/* Left Wavy Lines */}
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "4px",
-                      opacity: 0.55,
-                      marginRight: "16px",
-                    }}
-                  >
-                    <div style={{ width: "45px", height: "1px", backgroundColor: "#8b261e" }} />
-                    <div style={{ width: "65px", height: "1px", backgroundColor: "#8b261e" }} />
-                    <div style={{ width: "40px", height: "1px", backgroundColor: "#8b261e" }} />
-                  </div>
-
-                  {/* Stamp Round Seal */}
-                  <div
-                    style={{
-                      width: "88px",
-                      height: "88px",
-                      borderRadius: "50%",
-                      border: "2px dashed rgba(139, 38, 30, 0.65)",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transform: "rotate(-10deg)",
-                      padding: "6px",
-                      color: "#8b261e",
-                      fontFamily: "var(--font-special-elite), monospace",
-                      textShadow: "0 0 0.8px rgba(139, 38, 30, 0.4)",
-                      userSelect: "none",
-                    }}
-                  >
-                    <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "1px" }}>
-                      ★ SANYA ★
-                    </span>
-                    <span style={{ fontSize: "16px", lineHeight: 1, margin: "2px 0" }}>✉</span>
-                    <span style={{ fontSize: "7px", fontWeight: 700, letterSpacing: "0.5px" }}>
-                      AIR MAIL • 2026
-                    </span>
-                  </div>
-
-                  {/* Right Wavy Lines */}
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "4px",
-                      opacity: 0.55,
-                      marginLeft: "16px",
-                    }}
-                  >
-                    <div style={{ width: "60px", height: "1px", backgroundColor: "#8b261e" }} />
-                    <div style={{ width: "45px", height: "1px", backgroundColor: "#8b261e" }} />
-                    <div style={{ width: "55px", height: "1px", backgroundColor: "#8b261e" }} />
-                  </div>
-                </div>
-
-                {/* Main Stamped Title matching POSTCARD and FROM font */}
-                <h2
-                  className="typewriter-ink"
-                  style={{
-                    fontSize: "clamp(1.6rem, 3.8vw, 2.7rem)",
-                    letterSpacing: "0.26em",
-                    color: "#271f18",
-                    margin: "4px 0",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  S A N Y A
-                </h2>
-
-                <div
-                  className="typewriter-ink"
-                  style={{
-                    fontSize: "clamp(0.65rem, 1.3vw, 0.85rem)",
-                    letterSpacing: "0.22em",
-                    color: "rgba(39, 31, 24, 0.8)",
-                    marginBottom: "8px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  REACT MONOREPO ARCHITECTURE
-                </div>
-
-                <div
-                  className="typewriter-ink"
-                  style={{
-                    fontSize: "clamp(0.6rem, 1.1vw, 0.75rem)",
-                    letterSpacing: "0.14em",
-                    color: "rgba(39, 31, 24, 0.65)",
-                    borderTop: "1px solid rgba(43, 31, 24, 0.25)",
-                    paddingTop: "6px",
-                    marginTop: "2px",
-                  }}
-                >
-                  apps/web • apps/app • packages/ui
-                </div>
-
-                <div
-                  className="typewriter-ink"
-                  style={{
-                    marginTop: "16px",
-                    fontSize: "clamp(0.55rem, 1vw, 0.7rem)",
-                    letterSpacing: "0.15em",
-                    color: "rgba(39, 31, 24, 0.45)",
-                  }}
-                >
-                  ✦ TAP CARD TO FLIP BACK TO LETTER ✦
-                </div>
+                />
               </div>
             </div>
           </div>
