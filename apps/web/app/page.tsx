@@ -336,12 +336,12 @@ export default function PostcardLandingPage() {
               <div
                 style={{
                   position: "absolute",
-                  left: "11.5%",
-                  bottom: "8.5%",
-                  width: "35%",
-                  height: "6%",
+                  left: "13.2%",
+                  bottom: "9.2%",
+                  width: "33%",
+                  height: "3.2%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
                 }}
               >
                 <input
@@ -360,13 +360,17 @@ export default function PostcardLandingPage() {
                     outline: "none",
                     background: "transparent",
                     fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    fontSize: "clamp(0.6rem, 1.25vw, 0.85rem)",
                     color: "#271f18",
                     letterSpacing: "0.04em",
                     textShadow:
                       "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     fontWeight: 400,
                     cursor: "text",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: 1,
+                    verticalAlign: "baseline",
                   }}
                 />
               </div>
