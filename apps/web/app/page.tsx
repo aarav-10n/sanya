@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 
 // Synthesized vintage typewriter sound generator using Web Audio API
 const playTypewriterSound = () => {
   try {
-    const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+    const AudioContext =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
     if (!AudioContext) return;
     const ctx = new AudioContext();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
 
-    // White noise / click simulation
     osc.type = "triangle";
     osc.frequency.setValueAtTime(140 + Math.random() * 80, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.04);
@@ -30,7 +32,7 @@ const playTypewriterSound = () => {
     osc.start();
     osc.stop(ctx.currentTime + 0.045);
   } catch {
-    // Audio context not allowed before user gesture
+    // Audio context initialization
   }
 };
 
@@ -76,9 +78,6 @@ const STAMP_COLLECTION = [
 export default function PostcardLandingPage() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [stampIndex, setStampIndex] = useState(0);
-  const [hasStamp, setHasStamp] = useState(true);
-  const [fontMode, setFontMode] = useState<"typewriter" | "handwritten" | "courier">("typewriter");
-  const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Editable text states
   const [message, setMessage] = useState(
@@ -92,40 +91,24 @@ export default function PostcardLandingPage() {
   const [addressLine2, setAddressLine2] = useState("Via: React Web / App Monorepo");
   const [addressLine3, setAddressLine3] = useState("Loc: github.com/aarav-10n/sanya");
 
-  // Parallax 3D tilt tracking
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardInnerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+  // GSAP 3D Rotation Flip — zero layout shift, strictly pivots around 50% 50%
+  useEffect(() => {
+    if (!cardInnerRef.current) return;
+    gsap.to(cardInnerRef.current, {
+      rotationY: isFlipped ? 180 : 0,
+      duration: 0.75,
+      ease: "power2.inOut",
+      transformOrigin: "50% 50%",
+      force3D: true,
+    });
+  }, [isFlipped]);
 
-    const tiltX = (y - centerY) / 35;
-    const tiltY = (centerX - x) / 35;
-
-    setTilt({ x: tiltX, y: tiltY });
+  const handleCardClick = () => {
+    setIsFlipped((prev) => !prev);
+    playTypewriterSound();
   };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
-  const handleKeyStroke = () => {
-    if (soundEnabled) {
-      playTypewriterSound();
-    }
-  };
-
-  const currentFontFamily =
-    fontMode === "typewriter"
-      ? "'Special Elite', monospace"
-      : fontMode === "handwritten"
-      ? "'Caveat', cursive"
-      : "'Courier Prime', monospace";
 
   const currentStamp = STAMP_COLLECTION[stampIndex] ?? STAMP_COLLECTION[0]!;
 
@@ -133,21 +116,25 @@ export default function PostcardLandingPage() {
     <div
       style={{
         minHeight: "100vh",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
         alignItems: "center",
-        padding: "24px 16px",
+        justifyContent: "center",
+        padding: "80px 16px 40px 16px",
         position: "relative",
-        userSelect: "none",
       }}
     >
       {/* Top Vintage Navigation Header */}
       <header
         className="desk-header"
         style={{
-          width: "100%",
+          position: "absolute",
+          top: "16px",
+          left: "16px",
+          right: "16px",
           maxWidth: "1050px",
+          margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -157,6 +144,7 @@ export default function PostcardLandingPage() {
           borderRadius: "8px",
           backdropFilter: "blur(8px)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+          zIndex: 30,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -174,7 +162,14 @@ export default function PostcardLandingPage() {
             >
               Postal Bureau • Sanya Studio
             </h1>
-            <p style={{ margin: 0, fontSize: "11px", color: "rgba(232, 216, 190, 0.6)", fontFamily: "'Courier Prime', monospace" }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "11px",
+                color: "rgba(232, 216, 190, 0.6)",
+                fontFamily: "'Courier Prime', monospace",
+              }}
+            >
               Monorepo Public Web • Port 3000
             </p>
           </div>
@@ -205,34 +200,27 @@ export default function PostcardLandingPage() {
       <main
         style={{
           width: "100%",
-          maxWidth: "960px",
-          margin: "auto 0",
+          maxWidth: "880px",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <div
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="postcard-flipper"
-          style={{
-            width: "100%",
-            aspectRatio: "1.5 / 1",
-            maxWidth: "880px",
-            transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-            transition: "transform 0.15s ease-out",
-          }}
-        >
-          <div className={`postcard-inner ${isFlipped ? "flipped" : ""}`}>
+        <div className="postcard-wrapper">
+          <div
+            ref={cardInnerRef}
+            className="postcard-inner"
+            onClick={handleCardClick}
+            style={{ cursor: "pointer" }}
+            title={isFlipped ? "Tap to view back" : "Tap postcard to flip"}
+          >
             {/* ============================================================== */}
-            {/* POSTCARD BACK: Exact replica of the uploaded image + interactive */}
+            {/* POSTCARD BACK: Exact replica of reference image with inputs    */}
             {/* ============================================================== */}
             <div
-              className="postcard-face"
+              className="postcard-face postcard-back"
               style={{
-                position: "relative",
                 backgroundImage: "url('/postcard-bg.png')",
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
@@ -240,18 +228,19 @@ export default function PostcardLandingPage() {
                 color: "#231b15",
               }}
             >
-              {/* Optional Subtle Warm Lighting Sheen Overlay */}
+              {/* Warm Ambient Sheen */}
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
                   pointerEvents: "none",
-                  background: "radial-gradient(ellipse at 30% 25%, rgba(255, 245, 220, 0.15) 0%, transparent 60%)",
+                  background:
+                    "radial-gradient(ellipse at 30% 25%, rgba(255, 245, 220, 0.12) 0%, transparent 60%)",
                 }}
               />
 
               {/* ---------------------------------------------------------- */}
-              {/* LEFT SIDE: Interactive Letter / Typewriter Message Area */}
+              {/* LEFT SIDE: Directly editable typewriter letter             */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
@@ -267,9 +256,10 @@ export default function PostcardLandingPage() {
               >
                 <textarea
                   value={message}
+                  onClick={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     setMessage(e.target.value);
-                    handleKeyStroke();
+                    playTypewriterSound();
                   }}
                   placeholder="Click here to type your letter..."
                   spellCheck={false}
@@ -280,19 +270,20 @@ export default function PostcardLandingPage() {
                     outline: "none",
                     background: "transparent",
                     resize: "none",
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.35rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    lineHeight: fontMode === "handwritten" ? 1.35 : 1.45,
-                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    lineHeight: 1.45,
+                    color: "#241b16",
                     overflowY: "auto",
                     padding: 0,
                     margin: 0,
+                    cursor: "text",
                   }}
                 />
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* BOTTOM LEFT: "FROM:" Text Input on top of the underline */}
+              {/* BOTTOM LEFT: "FROM:" Text Input directly on the line       */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
@@ -308,9 +299,10 @@ export default function PostcardLandingPage() {
                 <input
                   type="text"
                   value={fromName}
+                  onClick={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     setFromName(e.target.value);
-                    handleKeyStroke();
+                    playTypewriterSound();
                   }}
                   placeholder="Your Name / Signature"
                   style={{
@@ -318,23 +310,25 @@ export default function PostcardLandingPage() {
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.3rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: "#241b16",
                     fontWeight: 600,
+                    cursor: "text",
                   }}
                 />
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* TOP RIGHT: Stamp Box & Interactive Stamp */}
+              {/* TOP RIGHT: Click directly on stamp to change it            */}
               {/* ---------------------------------------------------------- */}
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setStampIndex((prev) => (prev + 1) % STAMP_COLLECTION.length);
-                  handleKeyStroke();
+                  playTypewriterSound();
                 }}
-                title="Click to change vintage postage stamp"
+                title="Click stamp to change design"
                 style={{
                   position: "absolute",
                   top: "7.1%",
@@ -345,61 +339,58 @@ export default function PostcardLandingPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  transition: "transform 0.2s ease",
+                  zIndex: 10,
                 }}
               >
-                {hasStamp && (
-                  <div
-                    style={{
-                      width: "92%",
-                      height: "92%",
-                      backgroundColor: currentStamp.color,
-                      border: "2px dashed #ede2cf",
-                      borderRadius: "2px",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "4px 2px",
-                      color: currentStamp.accent,
-                      fontFamily: "'Courier Prime', monospace",
-                      transform: "rotate(-1.5deg)",
-                      userSelect: "none",
-                    }}
-                  >
-                    <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.5px" }}>
-                      {currentStamp.label}
-                    </span>
-                    <span style={{ fontSize: "18px", lineHeight: 1 }}>{currentStamp.motif}</span>
-                    <span style={{ fontSize: "9px", fontWeight: 700 }}>{currentStamp.price}</span>
-                  </div>
-                )}
+                <div
+                  style={{
+                    width: "92%",
+                    height: "92%",
+                    backgroundColor: currentStamp.color,
+                    border: "2px dashed #ede2cf",
+                    borderRadius: "2px",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "4px 2px",
+                    color: currentStamp.accent,
+                    fontFamily: "'Courier Prime', monospace",
+                    transform: "rotate(-1.5deg)",
+                    userSelect: "none",
+                    transition: "transform 0.15s ease",
+                  }}
+                >
+                  <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                    {currentStamp.label}
+                  </span>
+                  <span style={{ fontSize: "18px", lineHeight: 1 }}>{currentStamp.motif}</span>
+                  <span style={{ fontSize: "9px", fontWeight: 700 }}>{currentStamp.price}</span>
+                </div>
 
                 {/* Overlaid Wavy Postal Ink Cancellation Mark */}
-                {hasStamp && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "-28px",
-                      top: "10px",
-                      pointerEvents: "none",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "3px",
-                      opacity: 0.65,
-                      transform: "rotate(-8deg)",
-                    }}
-                  >
-                    <div style={{ width: "65px", height: "1px", backgroundColor: "#1e1e1e" }} />
-                    <div style={{ width: "75px", height: "1px", backgroundColor: "#1e1e1e" }} />
-                    <div style={{ width: "60px", height: "1px", backgroundColor: "#1e1e1e" }} />
-                  </div>
-                )}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-28px",
+                    top: "10px",
+                    pointerEvents: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "3px",
+                    opacity: 0.65,
+                    transform: "rotate(-8deg)",
+                  }}
+                >
+                  <div style={{ width: "65px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                  <div style={{ width: "75px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                  <div style={{ width: "60px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                </div>
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* RIGHT SIDE: 4 Horizontal Address Lines with Interactive Text */}
+              {/* RIGHT SIDE: 4 Horizontal Address Lines with direct inputs  */}
               {/* ---------------------------------------------------------- */}
               {/* Line 1 */}
               <div
@@ -416,18 +407,20 @@ export default function PostcardLandingPage() {
                 <input
                   type="text"
                   value={addressLine1}
+                  onClick={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     setAddressLine1(e.target.value);
-                    handleKeyStroke();
+                    playTypewriterSound();
                   }}
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: "#241b16",
+                    cursor: "text",
                   }}
                 />
               </div>
@@ -447,18 +440,20 @@ export default function PostcardLandingPage() {
                 <input
                   type="text"
                   value={addressLine2}
+                  onClick={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     setAddressLine2(e.target.value);
-                    handleKeyStroke();
+                    playTypewriterSound();
                   }}
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: "#241b16",
+                    cursor: "text",
                   }}
                 />
               </div>
@@ -478,23 +473,25 @@ export default function PostcardLandingPage() {
                 <input
                   type="text"
                   value={addressLine3}
+                  onClick={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     setAddressLine3(e.target.value);
-                    handleKeyStroke();
+                    playTypewriterSound();
                   }}
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: "#241b16",
+                    cursor: "text",
                   }}
                 />
               </div>
 
-              {/* Line 4: Interactive Monorepo Portal Action */}
+              {/* Line 4: Clickable portal link to app dashboard */}
               <div
                 style={{
                   position: "absolute",
@@ -508,9 +505,10 @@ export default function PostcardLandingPage() {
               >
                 <a
                   href="http://localhost:3001"
+                  onClick={(e) => e.stopPropagation()}
                   style={{
-                    fontFamily: currentFontFamily,
-                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.35rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
                     fontWeight: 700,
                     color: "#8b261e",
                     textDecoration: "none",
@@ -525,13 +523,12 @@ export default function PostcardLandingPage() {
             </div>
 
             {/* ============================================================== */}
-            {/* POSTCARD FRONT: Vintage Travel Illustration Side (When Flipped) */}
+            {/* POSTCARD FRONT: Vintage Scenic Illustration Side               */}
             {/* ============================================================== */}
             <div
               className="postcard-face postcard-front"
               style={{
                 backgroundColor: "#2e231c",
-                position: "relative",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -570,7 +567,8 @@ export default function PostcardLandingPage() {
                     width: "120%",
                     height: "140px",
                     background: "#0d1b2a",
-                    clipPath: "polygon(0 100%, 15% 45%, 35% 85%, 55% 30%, 75% 75%, 90% 40%, 100% 100%)",
+                    clipPath:
+                      "polygon(0 100%, 15% 45%, 35% 85%, 55% 30%, 75% 75%, 90% 40%, 100% 100%)",
                   }}
                 />
               </div>
@@ -624,145 +622,24 @@ export default function PostcardLandingPage() {
             </div>
           </div>
         </div>
+
+        {/* Subtle, Elegant Hint Below Postcard */}
+        <div
+          style={{
+            marginTop: "18px",
+            fontFamily: "'Courier Prime', monospace",
+            fontSize: "12px",
+            color: "rgba(232, 216, 190, 0.45)",
+            textAlign: "center",
+            letterSpacing: "0.08em",
+            pointerEvents: "none",
+          }}
+        >
+          {isFlipped
+            ? "✦ Tap postcard to flip back to letter"
+            : "✦ Tap card to flip • Click stamp to change • Click text to edit"}
+        </div>
       </main>
-
-      {/* Bottom Vintage Control Bar */}
-      <footer
-        className="controls-bar"
-        style={{
-          width: "100%",
-          maxWidth: "1050px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "12px",
-          flexWrap: "wrap",
-          padding: "14px 20px",
-          background: "rgba(35, 27, 22, 0.75)",
-          border: "1px solid rgba(190, 150, 100, 0.2)",
-          borderRadius: "8px",
-          backdropFilter: "blur(8px)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
-        }}
-      >
-        <button
-          onClick={() => {
-            setIsFlipped(!isFlipped);
-            handleKeyStroke();
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1px solid rgba(232, 216, 190, 0.3)",
-            backgroundColor: "rgba(255, 255, 255, 0.06)",
-            color: "#e8d8be",
-            fontFamily: "'Special Elite', monospace",
-            fontSize: "13px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          🔄 {isFlipped ? "Flip to Message Side" : "Flip Postcard Over"}
-        </button>
-
-        <button
-          onClick={() => {
-            setFontMode((prev) =>
-              prev === "typewriter"
-                ? "handwritten"
-                : prev === "handwritten"
-                ? "courier"
-                : "typewriter"
-            );
-            handleKeyStroke();
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1px solid rgba(232, 216, 190, 0.3)",
-            backgroundColor: "rgba(255, 255, 255, 0.06)",
-            color: "#e8d8be",
-            fontFamily: "'Special Elite', monospace",
-            fontSize: "13px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          ✍️ Font: {fontMode === "typewriter" ? "Typewriter" : fontMode === "handwritten" ? "Handwritten" : "Courier"}
-        </button>
-
-        <button
-          onClick={() => {
-            setStampIndex((prev) => (prev + 1) % STAMP_COLLECTION.length);
-            handleKeyStroke();
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1px solid rgba(232, 216, 190, 0.3)",
-            backgroundColor: "rgba(255, 255, 255, 0.06)",
-            color: "#e8d8be",
-            fontFamily: "'Special Elite', monospace",
-            fontSize: "13px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          📮 Stamp: {currentStamp.motif} {currentStamp.title}
-        </button>
-
-        <button
-          onClick={() => {
-            setSoundEnabled(!soundEnabled);
-            if (!soundEnabled) playTypewriterSound();
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1px solid rgba(232, 216, 190, 0.3)",
-            backgroundColor: soundEnabled ? "rgba(70, 140, 80, 0.25)" : "rgba(255, 255, 255, 0.06)",
-            color: "#e8d8be",
-            fontFamily: "'Special Elite', monospace",
-            fontSize: "13px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {soundEnabled ? "🔊 Typing Sound: On" : "🔈 Typing Sound: Muted"}
-        </button>
-
-        <button
-          onClick={() => window.print()}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1px solid rgba(232, 216, 190, 0.3)",
-            backgroundColor: "rgba(255, 255, 255, 0.06)",
-            color: "#e8d8be",
-            fontFamily: "'Special Elite', monospace",
-            fontSize: "13px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          🖨️ Print Postcard
-        </button>
-      </footer>
     </div>
   );
 }
