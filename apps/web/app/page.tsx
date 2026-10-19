@@ -1,227 +1,767 @@
 "use client";
 
-import { useState } from "react";
-import { Navbar } from "@repo/ui/navbar";
-import { Button } from "@repo/ui/button";
-import { Card } from "@repo/ui/card";
-import { Badge } from "@repo/ui/badge";
+import React, { useState, useRef } from "react";
 
-export default function Home() {
-  const [clickCount, setClickCount] = useState(0);
+// Synthesized vintage typewriter sound generator using Web Audio API
+const playTypewriterSound = () => {
+  try {
+    const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    // White noise / click simulation
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(140 + Math.random() * 80, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.04);
+
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(1200 + Math.random() * 400, ctx.currentTime);
+
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.045);
+  } catch {
+    // Audio context not allowed before user gesture
+  }
+};
+
+const STAMP_COLLECTION = [
+  {
+    id: "airmail",
+    title: "1926 Airmail",
+    color: "#8b261e",
+    accent: "#f4ebd0",
+    motif: "✈",
+    price: "24¢",
+    label: "U.S. AIR MAIL",
+  },
+  {
+    id: "botanical",
+    title: "Rose Botanical",
+    color: "#2c5e3b",
+    accent: "#e9eed9",
+    motif: "🌹",
+    price: "15¢",
+    label: "ROYAL BOTANICAL",
+  },
+  {
+    id: "nautical",
+    title: "Nautical Clipper",
+    color: "#1d3557",
+    accent: "#e2eafc",
+    motif: "⛵",
+    price: "30¢",
+    label: "TRANS-OCEANIC",
+  },
+  {
+    id: "celestial",
+    title: "Celestial Astrolabe",
+    color: "#4a2840",
+    accent: "#f3e8f0",
+    motif: "🪐",
+    price: "50¢",
+    label: "DEEP SPACE 2026",
+  },
+];
+
+export default function PostcardLandingPage() {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [stampIndex, setStampIndex] = useState(0);
+  const [hasStamp, setHasStamp] = useState(true);
+  const [fontMode, setFontMode] = useState<"typewriter" | "handwritten" | "courier">("typewriter");
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Editable text states
+  const [message, setMessage] = useState(
+    "Dearest Traveler,\n\n" +
+    "Welcome to Sanya — crafted with timeless aesthetic care and modern React code.\n\n" +
+    "Every line here represents a shared component, every stamp a connected app in our Turborepo.\n\n" +
+    "May your journeys through this code be swift and inspiring."
+  );
+  const [fromName, setFromName] = useState("Aarav & Sanya");
+  const [addressLine1, setAddressLine1] = useState("To: The Curious Explorer");
+  const [addressLine2, setAddressLine2] = useState("Via: React Web / App Monorepo");
+  const [addressLine3, setAddressLine3] = useState("Loc: github.com/aarav-10n/sanya");
+
+  // Parallax 3D tilt tracking
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const tiltX = (y - centerY) / 35;
+    const tiltY = (centerX - x) / 35;
+
+    setTilt({ x: tiltX, y: tiltY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  const handleKeyStroke = () => {
+    if (soundEnabled) {
+      playTypewriterSound();
+    }
+  };
+
+  const currentFontFamily =
+    fontMode === "typewriter"
+      ? "'Special Elite', monospace"
+      : fontMode === "handwritten"
+      ? "'Caveat', cursive"
+      : "'Courier Prime', monospace";
+
+  const currentStamp = STAMP_COLLECTION[stampIndex] ?? STAMP_COLLECTION[0]!;
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "sans-serif" }}>
-      <Navbar currentApp="web" title="Acme Inc. Monorepo" />
-
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "64px 24px", width: "100%" }}>
-        {/* Hero Section */}
-        <div style={{ textAlign: "center", marginBottom: "72px" }}>
-          <div style={{ display: "inline-flex", gap: "8px", marginBottom: "16px" }}>
-            <Badge variant="blue">Turborepo 2.0</Badge>
-            <Badge variant="purple">Next.js 16</Badge>
-            <Badge variant="green">React 19</Badge>
-          </div>
-          <h1
-            style={{
-              fontSize: "3.5rem",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              lineHeight: 1.15,
-              marginBottom: "20px",
-              background: "linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Standard Web / App Monorepo
-          </h1>
-          <p
-            style={{
-              fontSize: "1.25rem",
-              color: "#a1a1aa",
-              maxWidth: "700px",
-              margin: "0 auto 36px auto",
-              lineHeight: 1.6,
-            }}
-          >
-            A production-ready monorepo combining public marketing sites, authenticated
-            web applications, and shared UI design systems with Turborepo task pipelines.
-          </p>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="http://localhost:3001" style={{ textDecoration: "none" }}>
-              <Button size="lg" variant="primary">
-                Open Web App (:3001) →
-              </Button>
-            </a>
-            <a href="#architecture" style={{ textDecoration: "none" }}>
-              <Button size="lg" variant="outline">
-                View Monorepo Architecture
-              </Button>
-            </a>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "24px 16px",
+        position: "relative",
+        userSelect: "none",
+      }}
+    >
+      {/* Top Vintage Navigation Header */}
+      <header
+        className="desk-header"
+        style={{
+          width: "100%",
+          maxWidth: "1050px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "12px 20px",
+          background: "rgba(35, 27, 22, 0.75)",
+          border: "1px solid rgba(190, 150, 100, 0.2)",
+          borderRadius: "8px",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <span style={{ fontSize: "20px" }}>✉️</span>
+          <div>
+            <h1
+              style={{
+                fontFamily: "'Special Elite', monospace",
+                fontSize: "15px",
+                letterSpacing: "0.2em",
+                color: "#e8d8be",
+                margin: 0,
+                textTransform: "uppercase",
+              }}
+            >
+              Postal Bureau • Sanya Studio
+            </h1>
+            <p style={{ margin: 0, fontSize: "11px", color: "rgba(232, 216, 190, 0.6)", fontFamily: "'Courier Prime', monospace" }}>
+              Monorepo Public Web • Port 3000
+            </p>
           </div>
         </div>
 
-        {/* Monorepo Architecture Overview */}
-        <section id="architecture" style={{ marginBottom: "80px" }}>
-          <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <h2 style={{ fontSize: "2rem", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: "8px" }}>
-              Workspace Architecture
-            </h2>
-            <p style={{ color: "#a1a1aa", fontSize: "1rem" }}>
-              Strict separation between runnable applications and reusable shared packages
-            </p>
-          </div>
-
-          <div
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <a
+            href="http://localhost:3001"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-              gap: "24px",
+              fontFamily: "'Special Elite', monospace",
+              fontSize: "13px",
+              padding: "7px 16px",
+              borderRadius: "4px",
+              backgroundColor: "rgba(180, 70, 50, 0.85)",
+              color: "#fff",
+              border: "1px solid rgba(255, 200, 180, 0.3)",
+              transition: "all 0.2s ease",
+              boxShadow: "0 2px 8px rgba(180, 70, 50, 0.4)",
+              letterSpacing: "0.05em",
             }}
           >
-            <Card
-              title="apps/web"
-              badge="Port 3000"
-              description="Public-facing marketing website built with Next.js App Router, SSR/SSG, and fast SEO landing pages."
-              footer={
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ color: "#10b981", fontWeight: 600 }}>Active (Current Site)</span>
-                  <Badge variant="blue">Next.js</Badge>
-                </div>
-              }
-            >
-              <ul style={{ paddingLeft: "20px", margin: "12px 0 0 0", fontSize: "14px", color: "#a1a1aa" }}>
-                <li>High-performance SSR & Static Generation</li>
-                <li>Consumes shared components from <code>@repo/ui</code></li>
-                <li>Shares linting and TypeScript presets</li>
-              </ul>
-            </Card>
+            Launch App Console (:3001) →
+          </a>
+        </div>
+      </header>
 
-            <Card
-              title="apps/app"
-              badge="Port 3001"
-              description="Authenticated user portal and SaaS dashboard for account management, analytics, and app features."
-              footer={
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <a href="http://localhost:3001" style={{ color: "#0070f3", textDecoration: "none", fontWeight: 600 }}>
-                    Launch Dashboard →
-                  </a>
-                  <Badge variant="purple">Next.js</Badge>
-                </div>
-              }
-            >
-              <ul style={{ paddingLeft: "20px", margin: "12px 0 0 0", fontSize: "14px", color: "#a1a1aa" }}>
-                <li>Private web application / dashboard</li>
-                <li>Consistent design token implementation</li>
-                <li>Independent deployment & build cache</li>
-              </ul>
-            </Card>
-
-            <Card
-              title="packages/ui"
-              badge="Shared Lib"
-              description="Core design system component library consumed across all monorepo apps without duplicate code."
-              footer={
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ color: "#8b5cf6", fontWeight: 600 }}>Zero Build (JIT)</span>
-                  <Badge variant="green">React 19</Badge>
-                </div>
-              }
-            >
-              <ul style={{ paddingLeft: "20px", margin: "12px 0 0 0", fontSize: "14px", color: "#a1a1aa" }}>
-                <li>Shared <code>Button</code>, <code>Card</code>, <code>Navbar</code>, <code>Badge</code></li>
-                <li>Direct source exports (no bundling step required)</li>
-                <li>Fully typed with TypeScript</li>
-              </ul>
-            </Card>
-          </div>
-        </section>
-
-        {/* Live Shared Component Sandbox */}
-        <section
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid rgba(128, 128, 128, 0.15)",
-            borderRadius: "16px",
-            padding: "40px",
-            marginBottom: "80px",
-          }}
-        >
-          <div style={{ marginBottom: "24px" }}>
-            <Badge variant="amber">Interactive Demo</Badge>
-            <h2 style={{ fontSize: "1.75rem", fontWeight: 700, marginTop: "12px", marginBottom: "8px" }}>
-              Shared Design System in Action
-            </h2>
-            <p style={{ color: "#a1a1aa", fontSize: "14px" }}>
-              These buttons and cards are imported directly from <code>@repo/ui</code>.
-            </p>
-          </div>
-
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
-            <Button
-              variant="primary"
-              onClick={() => setClickCount((prev) => prev + 1)}
-            >
-              Clicked {clickCount} times
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => alert("Triggered from @repo/ui Button in apps/web!")}
-            >
-              Show Alert
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setClickCount(0)}
-            >
-              Reset Counter
-            </Button>
-            <Button variant="ghost">Ghost Action</Button>
-          </div>
-        </section>
-
-        {/* Developer Guide Commands */}
-        <section>
-          <h2 style={{ fontSize: "1.75rem", fontWeight: 700, marginBottom: "20px" }}>
-            Monorepo Developer Commands
-          </h2>
-          <div
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.6)",
-              border: "1px solid rgba(128, 128, 128, 0.2)",
-              borderRadius: "12px",
-              padding: "24px",
-              fontFamily: "monospace",
-              fontSize: "14px",
-              lineHeight: 1.8,
-            }}
-          >
-            <div style={{ color: "#a1a1aa" }}># Run both web and app concurrently</div>
-            <div style={{ color: "#10b981" }}>npm run dev</div>
-            <br />
-            <div style={{ color: "#a1a1aa" }}># Build all apps and packages with Turborepo caching</div>
-            <div style={{ color: "#10b981" }}>npm run build</div>
-            <br />
-            <div style={{ color: "#a1a1aa" }}># Run typechecking across all workspaces</div>
-            <div style={{ color: "#10b981" }}>npm run check-types</div>
-            <br />
-            <div style={{ color: "#a1a1aa" }}># Lint every app and package</div>
-            <div style={{ color: "#10b981" }}>npm run lint</div>
-          </div>
-        </section>
-      </main>
-
-      <footer
+      {/* Main Postcard Showcase */}
+      <main
         style={{
-          marginTop: "auto",
-          borderTop: "1px solid rgba(128, 128, 128, 0.15)",
-          padding: "32px 24px",
-          textAlign: "center",
-          color: "#a1a1aa",
-          fontSize: "14px",
+          width: "100%",
+          maxWidth: "960px",
+          margin: "auto 0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        React & Next.js Monorepo • Powered by Turborepo
+        <div
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="postcard-flipper"
+          style={{
+            width: "100%",
+            aspectRatio: "1.5 / 1",
+            maxWidth: "880px",
+            transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+            transition: "transform 0.15s ease-out",
+          }}
+        >
+          <div className={`postcard-inner ${isFlipped ? "flipped" : ""}`}>
+            {/* ============================================================== */}
+            {/* POSTCARD BACK: Exact replica of the uploaded image + interactive */}
+            {/* ============================================================== */}
+            <div
+              className="postcard-face"
+              style={{
+                position: "relative",
+                backgroundImage: "url('/postcard-bg.png')",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                color: "#231b15",
+              }}
+            >
+              {/* Optional Subtle Warm Lighting Sheen Overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  pointerEvents: "none",
+                  background: "radial-gradient(ellipse at 30% 25%, rgba(255, 245, 220, 0.15) 0%, transparent 60%)",
+                }}
+              />
+
+              {/* ---------------------------------------------------------- */}
+              {/* LEFT SIDE: Interactive Letter / Typewriter Message Area */}
+              {/* ---------------------------------------------------------- */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "5%",
+                  top: "18%",
+                  width: "41.5%",
+                  height: "66%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <textarea
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    handleKeyStroke();
+                  }}
+                  placeholder="Click here to type your letter..."
+                  spellCheck={false}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    resize: "none",
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.35rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    lineHeight: fontMode === "handwritten" ? 1.35 : 1.45,
+                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    overflowY: "auto",
+                    padding: 0,
+                    margin: 0,
+                  }}
+                />
+              </div>
+
+              {/* ---------------------------------------------------------- */}
+              {/* BOTTOM LEFT: "FROM:" Text Input on top of the underline */}
+              {/* ---------------------------------------------------------- */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "11.5%",
+                  bottom: "8.5%",
+                  width: "35%",
+                  height: "6%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  value={fromName}
+                  onChange={(e) => {
+                    setFromName(e.target.value);
+                    handleKeyStroke();
+                  }}
+                  placeholder="Your Name / Signature"
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.3rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                    fontWeight: 600,
+                  }}
+                />
+              </div>
+
+              {/* ---------------------------------------------------------- */}
+              {/* TOP RIGHT: Stamp Box & Interactive Stamp */}
+              {/* ---------------------------------------------------------- */}
+              <div
+                onClick={() => {
+                  setStampIndex((prev) => (prev + 1) % STAMP_COLLECTION.length);
+                  handleKeyStroke();
+                }}
+                title="Click to change vintage postage stamp"
+                style={{
+                  position: "absolute",
+                  top: "7.1%",
+                  right: "5.5%",
+                  width: "10.4%",
+                  height: "18.8%",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                {hasStamp && (
+                  <div
+                    style={{
+                      width: "92%",
+                      height: "92%",
+                      backgroundColor: currentStamp.color,
+                      border: "2px dashed #ede2cf",
+                      borderRadius: "2px",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "4px 2px",
+                      color: currentStamp.accent,
+                      fontFamily: "'Courier Prime', monospace",
+                      transform: "rotate(-1.5deg)",
+                      userSelect: "none",
+                    }}
+                  >
+                    <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                      {currentStamp.label}
+                    </span>
+                    <span style={{ fontSize: "18px", lineHeight: 1 }}>{currentStamp.motif}</span>
+                    <span style={{ fontSize: "9px", fontWeight: 700 }}>{currentStamp.price}</span>
+                  </div>
+                )}
+
+                {/* Overlaid Wavy Postal Ink Cancellation Mark */}
+                {hasStamp && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "-28px",
+                      top: "10px",
+                      pointerEvents: "none",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "3px",
+                      opacity: 0.65,
+                      transform: "rotate(-8deg)",
+                    }}
+                  >
+                    <div style={{ width: "65px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                    <div style={{ width: "75px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                    <div style={{ width: "60px", height: "1px", backgroundColor: "#1e1e1e" }} />
+                  </div>
+                )}
+              </div>
+
+              {/* ---------------------------------------------------------- */}
+              {/* RIGHT SIDE: 4 Horizontal Address Lines with Interactive Text */}
+              {/* ---------------------------------------------------------- */}
+              {/* Line 1 */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "56.6%",
+                  top: "40.5%",
+                  width: "34.3%",
+                  height: "5.5%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  value={addressLine1}
+                  onChange={(e) => {
+                    setAddressLine1(e.target.value);
+                    handleKeyStroke();
+                  }}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                  }}
+                />
+              </div>
+
+              {/* Line 2 */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "56.6%",
+                  top: "48.8%",
+                  width: "34.3%",
+                  height: "5.5%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  value={addressLine2}
+                  onChange={(e) => {
+                    setAddressLine2(e.target.value);
+                    handleKeyStroke();
+                  }}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                  }}
+                />
+              </div>
+
+              {/* Line 3 */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "56.6%",
+                  top: "57.2%",
+                  width: "34.3%",
+                  height: "5.5%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  value={addressLine3}
+                  onChange={(e) => {
+                    setAddressLine3(e.target.value);
+                    handleKeyStroke();
+                  }}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.25rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    color: fontMode === "handwritten" ? "#1a2c47" : "#241b16",
+                  }}
+                />
+              </div>
+
+              {/* Line 4: Interactive Monorepo Portal Action */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "56.6%",
+                  top: "65.5%",
+                  width: "34.3%",
+                  height: "5.5%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <a
+                  href="http://localhost:3001"
+                  style={{
+                    fontFamily: currentFontFamily,
+                    fontSize: fontMode === "handwritten" ? "clamp(0.85rem, 2vw, 1.35rem)" : "clamp(0.65rem, 1.4vw, 0.95rem)",
+                    fontWeight: 700,
+                    color: "#8b261e",
+                    textDecoration: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>→ Launch App (Port 3001)</span>
+                </a>
+              </div>
+            </div>
+
+            {/* ============================================================== */}
+            {/* POSTCARD FRONT: Vintage Travel Illustration Side (When Flipped) */}
+            {/* ============================================================== */}
+            <div
+              className="postcard-face postcard-front"
+              style={{
+                backgroundColor: "#2e231c",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                overflow: "hidden",
+                border: "12px solid #eae1d0",
+              }}
+            >
+              {/* Vintage Grain & Vignette */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage:
+                    "radial-gradient(circle at center, transparent 40%, rgba(20, 14, 10, 0.7) 100%), linear-gradient(135deg, rgba(200, 120, 50, 0.3) 0%, rgba(20, 30, 60, 0.6) 100%)",
+                  zIndex: 2,
+                }}
+              />
+
+              {/* Scenic Graphic Artwork */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(180deg, #1b263b 0%, #415a77 40%, #c77dff 65%, #ffb703 85%, #fb8500 100%)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                {/* Silhouette mountains */}
+                <div
+                  style={{
+                    width: "120%",
+                    height: "140px",
+                    background: "#0d1b2a",
+                    clipPath: "polygon(0 100%, 15% 45%, 35% 85%, 55% 30%, 75% 75%, 90% 40%, 100% 100%)",
+                  }}
+                />
+              </div>
+
+              {/* Vintage Embossed Typographic Banner */}
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 10,
+                  textAlign: "center",
+                  textShadow: "0 4px 15px rgba(0,0,0,0.8)",
+                  padding: "0 20px",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontStyle: "italic",
+                    fontSize: "1.4rem",
+                    color: "#fefae0",
+                    letterSpacing: "0.1em",
+                    marginBottom: "4px",
+                  }}
+                >
+                  Greetings from
+                </div>
+                <h2
+                  style={{
+                    fontFamily: "'Special Elite', monospace",
+                    fontSize: "3.6rem",
+                    letterSpacing: "0.25em",
+                    color: "#fefae0",
+                    margin: 0,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  S A N Y A
+                </h2>
+                <div
+                  style={{
+                    fontFamily: "'Courier Prime', monospace",
+                    fontSize: "0.9rem",
+                    color: "#dda15e",
+                    letterSpacing: "0.2em",
+                    marginTop: "8px",
+                  }}
+                >
+                  EST. 2026 • REACT MONOREPO ARCHITECTURE
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Bottom Vintage Control Bar */}
+      <footer
+        className="controls-bar"
+        style={{
+          width: "100%",
+          maxWidth: "1050px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "12px",
+          flexWrap: "wrap",
+          padding: "14px 20px",
+          background: "rgba(35, 27, 22, 0.75)",
+          border: "1px solid rgba(190, 150, 100, 0.2)",
+          borderRadius: "8px",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+        }}
+      >
+        <button
+          onClick={() => {
+            setIsFlipped(!isFlipped);
+            handleKeyStroke();
+          }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "1px solid rgba(232, 216, 190, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.06)",
+            color: "#e8d8be",
+            fontFamily: "'Special Elite', monospace",
+            fontSize: "13px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          🔄 {isFlipped ? "Flip to Message Side" : "Flip Postcard Over"}
+        </button>
+
+        <button
+          onClick={() => {
+            setFontMode((prev) =>
+              prev === "typewriter"
+                ? "handwritten"
+                : prev === "handwritten"
+                ? "courier"
+                : "typewriter"
+            );
+            handleKeyStroke();
+          }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "1px solid rgba(232, 216, 190, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.06)",
+            color: "#e8d8be",
+            fontFamily: "'Special Elite', monospace",
+            fontSize: "13px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          ✍️ Font: {fontMode === "typewriter" ? "Typewriter" : fontMode === "handwritten" ? "Handwritten" : "Courier"}
+        </button>
+
+        <button
+          onClick={() => {
+            setStampIndex((prev) => (prev + 1) % STAMP_COLLECTION.length);
+            handleKeyStroke();
+          }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "1px solid rgba(232, 216, 190, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.06)",
+            color: "#e8d8be",
+            fontFamily: "'Special Elite', monospace",
+            fontSize: "13px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          📮 Stamp: {currentStamp.motif} {currentStamp.title}
+        </button>
+
+        <button
+          onClick={() => {
+            setSoundEnabled(!soundEnabled);
+            if (!soundEnabled) playTypewriterSound();
+          }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "1px solid rgba(232, 216, 190, 0.3)",
+            backgroundColor: soundEnabled ? "rgba(70, 140, 80, 0.25)" : "rgba(255, 255, 255, 0.06)",
+            color: "#e8d8be",
+            fontFamily: "'Special Elite', monospace",
+            fontSize: "13px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {soundEnabled ? "🔊 Typing Sound: On" : "🔈 Typing Sound: Muted"}
+        </button>
+
+        <button
+          onClick={() => window.print()}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "1px solid rgba(232, 216, 190, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.06)",
+            color: "#e8d8be",
+            fontFamily: "'Special Elite', monospace",
+            fontSize: "13px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          🖨️ Print Postcard
+        </button>
       </footer>
     </div>
   );
