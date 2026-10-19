@@ -38,42 +38,22 @@ const playTypewriterSound = () => {
 
 const STAMP_COLLECTION = [
   {
-    id: "airmail",
-    title: "1926 Airmail",
-    color: "#8b261e",
-    accent: "#f4ebd0",
-    motif: "✈",
-    price: "24¢",
-    label: "U.S. AIR MAIL",
+    id: "plum",
+    title: "Vintage Plum Postage Stamp",
+    src: "/stamps/vintage_plum_postage_stamp.svg",
   },
   {
-    id: "botanical",
-    title: "Rose Botanical",
-    color: "#2c5e3b",
-    accent: "#e9eed9",
-    motif: "🌹",
-    price: "15¢",
-    label: "ROYAL BOTANICAL",
+    id: "dog",
+    title: "Vintage Dog Postage Stamp",
+    src: "/stamps/vintage_dog_postage_stamp.svg",
   },
   {
-    id: "nautical",
-    title: "Nautical Clipper",
-    color: "#1d3557",
-    accent: "#e2eafc",
-    motif: "⛵",
-    price: "30¢",
-    label: "TRANS-OCEANIC",
-  },
-  {
-    id: "celestial",
-    title: "Celestial Astrolabe",
-    color: "#4a2840",
-    accent: "#f3e8f0",
-    motif: "🪐",
-    price: "50¢",
-    label: "DEEP SPACE 2026",
+    id: "vintage",
+    title: "Vintage Postage Stamp",
+    src: "/stamps/vintage_postage_stamp.svg",
   },
 ];
+
 
 export default function PostcardLandingPage() {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -432,13 +412,13 @@ export default function PostcardLandingPage() {
                   setStampIndex((prev) => (prev + 1) % STAMP_COLLECTION.length);
                   playTypewriterSound();
                 }}
-                title="Click stamp to change design"
+                title={`Stamp: ${currentStamp.title} (Click to change)`}
                 style={{
                   position: "absolute",
-                  top: "7.1%",
-                  right: "5.5%",
-                  width: "10.4%",
-                  height: "18.8%",
+                  top: "6.8%",
+                  right: "5.2%",
+                  width: "11%",
+                  height: "19.5%",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -446,32 +426,22 @@ export default function PostcardLandingPage() {
                   zIndex: 10,
                 }}
               >
-                <div
+                {/* SVG Stamp Graphic */}
+                <img
+                  src={currentStamp.src}
+                  alt={currentStamp.title}
+                  draggable={false}
                   style={{
-                    width: "92%",
-                    height: "92%",
-                    backgroundColor: currentStamp.color,
-                    border: "2px dashed #ede2cf",
-                    borderRadius: "2px",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.35)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "4px 2px",
-                    color: currentStamp.accent,
-                    fontFamily: "var(--font-special-elite), monospace",
-                    transform: "rotate(-1.5deg)",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.35))",
+                    transform: "rotate(-1.2deg)",
                     userSelect: "none",
-                    transition: "transform 0.15s ease",
+                    pointerEvents: "none",
                   }}
-                >
-                  <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.5px" }}>
-                    {currentStamp.label}
-                  </span>
-                  <span style={{ fontSize: "18px", lineHeight: 1 }}>{currentStamp.motif}</span>
-                  <span style={{ fontSize: "9px", fontWeight: 700 }}>{currentStamp.price}</span>
-                </div>
+                />
+
 
                 {/* Overlaid Wavy Postal Ink Cancellation Mark */}
                 <div
