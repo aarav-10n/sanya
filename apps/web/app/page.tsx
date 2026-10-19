@@ -265,7 +265,7 @@ export default function PostcardLandingPage() {
             <div
               className="postcard-face postcard-back"
               style={{
-                backgroundImage: "url('/postcard-bg.png')",
+                backgroundImage: "url('/postcard-back-clean.png')",
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -284,12 +284,46 @@ export default function PostcardLandingPage() {
               />
 
               {/* ---------------------------------------------------------- */}
+              {/* CRISP HIGH-RESOLUTION "POSTCARD" HEADER                    */}
+              {/* ---------------------------------------------------------- */}
+              <div
+                className="typewriter-ink"
+                style={{
+                  position: "absolute",
+                  left: "4.8%",
+                  top: "6.8%",
+                  fontSize: "clamp(1.2rem, 2.7vw, 1.85rem)",
+                  fontWeight: 700,
+                  letterSpacing: "0.28em",
+                  color: "#271f18",
+                  userSelect: "none",
+                }}
+              >
+                P O S T C A R D
+              </div>
+
+              {/* ---------------------------------------------------------- */}
+              {/* CRISP CENTRAL VERTICAL DIVIDER LINE                        */}
+              {/* ---------------------------------------------------------- */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "49.6%",
+                  top: "22%",
+                  bottom: "12%",
+                  width: "1.5px",
+                  backgroundColor: "rgba(39, 31, 24, 0.8)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* ---------------------------------------------------------- */}
               {/* LEFT SIDE: Directly editable typewriter letter             */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
                   position: "absolute",
-                  left: "5%",
+                  left: "4.8%",
                   top: "18%",
                   width: "41.5%",
                   height: "66%",
@@ -331,19 +365,34 @@ export default function PostcardLandingPage() {
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* BOTTOM LEFT: "FROM:" Text Input on the underline           */}
+              {/* BOTTOM LEFT: CRISP "FROM:" Text + Underline + Input        */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
                   position: "absolute",
-                  left: "13.2%",
-                  bottom: "9.2%",
-                  width: "33%",
-                  height: "3.2%",
+                  left: "4.8%",
+                  bottom: "8.5%",
+                  width: "41.5%",
                   display: "flex",
-                  alignItems: "flex-end",
+                  alignItems: "baseline",
+                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
+                  paddingBottom: "1px",
                 }}
               >
+                <span
+                  className="typewriter-ink"
+                  style={{
+                    fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
+                    fontWeight: 700,
+                    letterSpacing: "0.2em",
+                    color: "#271f18",
+                    marginRight: "6px",
+                    userSelect: "none",
+                    flexShrink: 0,
+                  }}
+                >
+                  F R O M :
+                </span>
                 <input
                   type="text"
                   value={fromName}
@@ -360,7 +409,7 @@ export default function PostcardLandingPage() {
                     outline: "none",
                     background: "transparent",
                     fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-                    fontSize: "clamp(0.6rem, 1.25vw, 0.85rem)",
+                    fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
                     color: "#271f18",
                     letterSpacing: "0.04em",
                     textShadow:
@@ -370,7 +419,6 @@ export default function PostcardLandingPage() {
                     padding: 0,
                     margin: 0,
                     lineHeight: 1,
-                    verticalAlign: "baseline",
                   }}
                 />
               </div>
@@ -446,7 +494,7 @@ export default function PostcardLandingPage() {
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* RIGHT SIDE: 4 Horizontal Address Lines with direct inputs  */}
+              {/* RIGHT SIDE: 4 Horizontal Address Lines with crisp underlines */}
               {/* ---------------------------------------------------------- */}
               {/* Line 1 */}
               <div
@@ -457,7 +505,9 @@ export default function PostcardLandingPage() {
                   width: "34.3%",
                   height: "5.5%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
+                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
+                  paddingBottom: "2px",
                 }}
               >
                 <input
@@ -481,6 +531,9 @@ export default function PostcardLandingPage() {
                     textShadow:
                       "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: 1,
                   }}
                 />
               </div>
@@ -494,7 +547,9 @@ export default function PostcardLandingPage() {
                   width: "34.3%",
                   height: "5.5%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
+                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
+                  paddingBottom: "2px",
                 }}
               >
                 <input
@@ -518,6 +573,9 @@ export default function PostcardLandingPage() {
                     textShadow:
                       "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: 1,
                   }}
                 />
               </div>
@@ -531,7 +589,9 @@ export default function PostcardLandingPage() {
                   width: "34.3%",
                   height: "5.5%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
+                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
+                  paddingBottom: "2px",
                 }}
               >
                 <input
@@ -555,6 +615,9 @@ export default function PostcardLandingPage() {
                     textShadow:
                       "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: 1,
                   }}
                 />
               </div>
@@ -568,7 +631,9 @@ export default function PostcardLandingPage() {
                   width: "34.3%",
                   height: "5.5%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
+                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
+                  paddingBottom: "2px",
                 }}
               >
                 <a
