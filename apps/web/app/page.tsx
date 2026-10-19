@@ -185,11 +185,12 @@ export default function PostcardLandingPage() {
           <span style={{ fontSize: "20px" }}>✉️</span>
           <div>
             <h1
+              className="typewriter-ink"
               style={{
-                fontFamily: "'Special Elite', monospace",
                 fontSize: "15px",
                 letterSpacing: "0.2em",
-                color: "#e8d8be",
+                color: "#e8d8be !important",
+                textShadow: "none !important",
                 margin: 0,
                 textTransform: "uppercase",
               }}
@@ -201,7 +202,7 @@ export default function PostcardLandingPage() {
                 margin: 0,
                 fontSize: "11px",
                 color: "rgba(232, 216, 190, 0.6)",
-                fontFamily: "'Courier Prime', monospace",
+                fontFamily: "var(--font-special-elite), monospace",
               }}
             >
               Monorepo Public Web • Port 3000
@@ -212,13 +213,14 @@ export default function PostcardLandingPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <a
             href="http://localhost:3001"
+            className="typewriter-ink"
             style={{
-              fontFamily: "'Special Elite', monospace",
               fontSize: "13px",
               padding: "7px 16px",
               borderRadius: "4px",
               backgroundColor: "rgba(180, 70, 50, 0.85)",
-              color: "#fff",
+              color: "#fff !important",
+              textShadow: "none !important",
               border: "1px solid rgba(255, 200, 180, 0.3)",
               transition: "all 0.2s ease",
               boxShadow: "0 2px 8px rgba(180, 70, 50, 0.4)",
@@ -249,10 +251,10 @@ export default function PostcardLandingPage() {
             className="postcard-inner"
             onClick={handleCardClick}
             style={{ cursor: "pointer" }}
-            title={isFlipped ? "Tap to view back" : "Tap postcard to flip"}
+            title={isFlipped ? "Tap to view message side" : "Tap postcard to flip"}
           >
             {/* ============================================================== */}
-            {/* POSTCARD BACK: Exact replica of reference image with inputs    */}
+            {/* POSTCARD FRONT: Exact replica of reference image with inputs   */}
             {/* ============================================================== */}
             <div
               className="postcard-face postcard-back"
@@ -261,7 +263,7 @@ export default function PostcardLandingPage() {
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                color: "#231b15",
+                color: "#271f18",
               }}
             >
               {/* Warm Ambient Sheen */}
@@ -299,6 +301,7 @@ export default function PostcardLandingPage() {
                   }}
                   placeholder="Click here to type your letter..."
                   spellCheck={false}
+                  className="typewriter-ink"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -306,10 +309,13 @@ export default function PostcardLandingPage() {
                     outline: "none",
                     background: "transparent",
                     resize: "none",
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    lineHeight: 1.45,
-                    color: "#241b16",
+                    lineHeight: 1.5,
+                    color: "#271f18",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     overflowY: "auto",
                     padding: 0,
                     margin: 0,
@@ -319,7 +325,7 @@ export default function PostcardLandingPage() {
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* BOTTOM LEFT: "FROM:" Text Input directly on the line       */}
+              {/* BOTTOM LEFT: "FROM:" Text Input on the underline           */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
@@ -341,15 +347,19 @@ export default function PostcardLandingPage() {
                     playTypewriterSound();
                   }}
                   placeholder="Your Name / Signature"
+                  className="typewriter-ink"
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: "#241b16",
-                    fontWeight: 600,
+                    color: "#271f18",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
+                    fontWeight: 400,
                     cursor: "text",
                   }}
                 />
@@ -392,7 +402,7 @@ export default function PostcardLandingPage() {
                     justifyContent: "space-between",
                     padding: "4px 2px",
                     color: currentStamp.accent,
-                    fontFamily: "'Courier Prime', monospace",
+                    fontFamily: "var(--font-special-elite), monospace",
                     transform: "rotate(-1.5deg)",
                     userSelect: "none",
                     transition: "transform 0.15s ease",
@@ -448,14 +458,18 @@ export default function PostcardLandingPage() {
                     setAddressLine1(e.target.value);
                     playTypewriterSound();
                   }}
+                  className="typewriter-ink"
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: "#241b16",
+                    color: "#271f18",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
                   }}
                 />
@@ -481,14 +495,18 @@ export default function PostcardLandingPage() {
                     setAddressLine2(e.target.value);
                     playTypewriterSound();
                   }}
+                  className="typewriter-ink"
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: "#241b16",
+                    color: "#271f18",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
                   }}
                 />
@@ -514,14 +532,18 @@ export default function PostcardLandingPage() {
                     setAddressLine3(e.target.value);
                     playTypewriterSound();
                   }}
+                  className="typewriter-ink"
                   style={{
                     width: "100%",
                     border: "none",
                     outline: "none",
                     background: "transparent",
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                    color: "#241b16",
+                    color: "#271f18",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                     cursor: "text",
                   }}
                 />
@@ -542,15 +564,19 @@ export default function PostcardLandingPage() {
                 <a
                   href="http://localhost:3001"
                   onClick={(e) => e.stopPropagation()}
+                  className="typewriter-ink"
                   style={{
-                    fontFamily: "'Special Elite', monospace",
+                    fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                     fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
                     fontWeight: 700,
-                    color: "#8b261e",
+                    color: "#8b261e !important",
                     textDecoration: "none",
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
+                    letterSpacing: "0.04em",
+                    textShadow:
+                      "0 0 0.8px rgba(139, 38, 30, 0.45), 0.3px 0.3px 0px rgba(139, 38, 30, 0.25) !important",
                   }}
                 >
                   <span>→ Launch App (Port 3001)</span>
@@ -559,100 +585,207 @@ export default function PostcardLandingPage() {
             </div>
 
             {/* ============================================================== */}
-            {/* POSTCARD FRONT: Vintage Scenic Illustration Side               */}
+            {/* POSTCARD BACK: Authentic matching vintage paper effect         */}
             {/* ============================================================== */}
             <div
-              className="postcard-face postcard-front"
+              className="postcard-face postcard-front postcard-reverse-paper"
               style={{
-                backgroundColor: "#2e231c",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                overflow: "hidden",
-                border: "12px solid #eae1d0",
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                color: "#271f18",
+                padding: "24px",
               }}
             >
-              {/* Vintage Grain & Vignette */}
+              {/* Outer double postal frame */}
               <div
                 style={{
                   position: "absolute",
-                  inset: 0,
-                  backgroundImage:
-                    "radial-gradient(circle at center, transparent 40%, rgba(20, 14, 10, 0.7) 100%), linear-gradient(135deg, rgba(200, 120, 50, 0.3) 0%, rgba(20, 30, 60, 0.6) 100%)",
-                  zIndex: 2,
+                  inset: "16px",
+                  border: "2px solid rgba(43, 31, 24, 0.5)",
+                  outline: "1px solid rgba(43, 31, 24, 0.3)",
+                  outlineOffset: "4px",
+                  borderRadius: "2px",
+                  pointerEvents: "none",
                 }}
               />
 
-              {/* Scenic Graphic Artwork */}
+              {/* Vintage Corner Postage Filigree */}
               <div
+                className="typewriter-ink"
                 style={{
                   position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(180deg, #1b263b 0%, #415a77 40%, #c77dff 65%, #ffb703 85%, #fb8500 100%)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
+                  top: "22px",
+                  left: "26px",
+                  fontSize: "12px",
+                  opacity: 0.5,
+                  letterSpacing: "1px",
                 }}
               >
-                {/* Silhouette mountains */}
-                <div
-                  style={{
-                    width: "120%",
-                    height: "140px",
-                    background: "#0d1b2a",
-                    clipPath:
-                      "polygon(0 100%, 15% 45%, 35% 85%, 55% 30%, 75% 75%, 90% 40%, 100% 100%)",
-                  }}
-                />
+                № 1926/2026
               </div>
 
-              {/* Vintage Embossed Typographic Banner */}
               <div
+                className="typewriter-ink"
                 style={{
-                  position: "relative",
-                  zIndex: 10,
-                  textAlign: "center",
-                  textShadow: "0 4px 15px rgba(0,0,0,0.8)",
-                  padding: "0 20px",
+                  position: "absolute",
+                  top: "22px",
+                  right: "26px",
+                  fontSize: "12px",
+                  opacity: 0.5,
+                  letterSpacing: "1px",
                 }}
               >
+                SERIES • A
+              </div>
+
+              {/* Main Content Center */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  maxWidth: "80%",
+                  zIndex: 2,
+                }}
+              >
+                {/* Header in Typewriter Spaced Serif matching POSTCARD */}
                 <div
+                  className="typewriter-ink"
                   style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontStyle: "italic",
-                    fontSize: "1.4rem",
-                    color: "#fefae0",
-                    letterSpacing: "0.1em",
-                    marginBottom: "4px",
+                    fontSize: "clamp(0.75rem, 1.8vw, 1.15rem)",
+                    letterSpacing: "0.3em",
+                    color: "#271f18",
+                    textTransform: "uppercase",
+                    marginBottom: "10px",
                   }}
                 >
-                  Greetings from
+                  C A R T E   P O S T A L E
                 </div>
-                <h2
+
+                {/* Circular Stamped Postal Seal with Wavy Cancellation Lines */}
+                <div
                   style={{
-                    fontFamily: "'Special Elite', monospace",
-                    fontSize: "3.6rem",
-                    letterSpacing: "0.25em",
-                    color: "#fefae0",
-                    margin: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "8px 0 14px 0",
+                    position: "relative",
+                  }}
+                >
+                  {/* Left Wavy Lines */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                      opacity: 0.55,
+                      marginRight: "16px",
+                    }}
+                  >
+                    <div style={{ width: "45px", height: "1px", backgroundColor: "#8b261e" }} />
+                    <div style={{ width: "65px", height: "1px", backgroundColor: "#8b261e" }} />
+                    <div style={{ width: "40px", height: "1px", backgroundColor: "#8b261e" }} />
+                  </div>
+
+                  {/* Stamp Round Seal */}
+                  <div
+                    style={{
+                      width: "88px",
+                      height: "88px",
+                      borderRadius: "50%",
+                      border: "2px dashed rgba(139, 38, 30, 0.65)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transform: "rotate(-10deg)",
+                      padding: "6px",
+                      color: "#8b261e",
+                      fontFamily: "var(--font-special-elite), monospace",
+                      textShadow: "0 0 0.8px rgba(139, 38, 30, 0.4)",
+                      userSelect: "none",
+                    }}
+                  >
+                    <span style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "1px" }}>
+                      ★ SANYA ★
+                    </span>
+                    <span style={{ fontSize: "16px", lineHeight: 1, margin: "2px 0" }}>✉</span>
+                    <span style={{ fontSize: "7px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                      AIR MAIL • 2026
+                    </span>
+                  </div>
+
+                  {/* Right Wavy Lines */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                      opacity: 0.55,
+                      marginLeft: "16px",
+                    }}
+                  >
+                    <div style={{ width: "60px", height: "1px", backgroundColor: "#8b261e" }} />
+                    <div style={{ width: "45px", height: "1px", backgroundColor: "#8b261e" }} />
+                    <div style={{ width: "55px", height: "1px", backgroundColor: "#8b261e" }} />
+                  </div>
+                </div>
+
+                {/* Main Stamped Title matching POSTCARD and FROM font */}
+                <h2
+                  className="typewriter-ink"
+                  style={{
+                    fontSize: "clamp(1.6rem, 3.8vw, 2.7rem)",
+                    letterSpacing: "0.26em",
+                    color: "#271f18",
+                    margin: "4px 0",
                     textTransform: "uppercase",
                   }}
                 >
                   S A N Y A
                 </h2>
+
                 <div
+                  className="typewriter-ink"
                   style={{
-                    fontFamily: "'Courier Prime', monospace",
-                    fontSize: "0.9rem",
-                    color: "#dda15e",
-                    letterSpacing: "0.2em",
-                    marginTop: "8px",
+                    fontSize: "clamp(0.65rem, 1.3vw, 0.85rem)",
+                    letterSpacing: "0.22em",
+                    color: "rgba(39, 31, 24, 0.8)",
+                    marginBottom: "8px",
+                    textTransform: "uppercase",
                   }}
                 >
-                  EST. 2026 • REACT MONOREPO ARCHITECTURE
+                  REACT MONOREPO ARCHITECTURE
+                </div>
+
+                <div
+                  className="typewriter-ink"
+                  style={{
+                    fontSize: "clamp(0.6rem, 1.1vw, 0.75rem)",
+                    letterSpacing: "0.14em",
+                    color: "rgba(39, 31, 24, 0.65)",
+                    borderTop: "1px solid rgba(43, 31, 24, 0.25)",
+                    paddingTop: "6px",
+                    marginTop: "2px",
+                  }}
+                >
+                  apps/web • apps/app • packages/ui
+                </div>
+
+                <div
+                  className="typewriter-ink"
+                  style={{
+                    marginTop: "16px",
+                    fontSize: "clamp(0.55rem, 1vw, 0.7rem)",
+                    letterSpacing: "0.15em",
+                    color: "rgba(39, 31, 24, 0.45)",
+                  }}
+                >
+                  ✦ TAP CARD TO FLIP BACK TO LETTER ✦
                 </div>
               </div>
             </div>
@@ -661,11 +794,12 @@ export default function PostcardLandingPage() {
 
         {/* Subtle, Elegant Hint Below Postcard */}
         <div
+          className="typewriter-ink"
           style={{
             marginTop: "18px",
-            fontFamily: "'Courier Prime', monospace",
             fontSize: "12px",
-            color: "rgba(232, 216, 190, 0.45)",
+            color: "rgba(232, 216, 190, 0.5) !important",
+            textShadow: "none !important",
             textAlign: "center",
             letterSpacing: "0.08em",
             pointerEvents: "none",

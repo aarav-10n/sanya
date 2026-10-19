@@ -71,6 +71,38 @@ a {
   transform: rotateY(180deg);
 }
 
+/* Authentic Typewriter Stamped Ink Effect (matches POSTCARD & FROM) */
+.typewriter-ink {
+  font-family: var(--font-special-elite), "Special Elite", cursive, monospace !important;
+  color: #271f18 !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: 
+    0 0 0.8px rgba(35, 25, 20, 0.45),
+    0.3px 0.3px 0px rgba(35, 25, 20, 0.25) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.typewriter-ink::placeholder {
+  color: rgba(60, 45, 35, 0.45) !important;
+  text-shadow: none !important;
+}
+
+/* Postcard Reverse Paper (same vintage kraft paper effect as the front) */
+.postcard-reverse-paper {
+  background-color: #d8c7a8;
+  background-image: 
+    radial-gradient(ellipse at 35% 30%, rgba(245, 235, 215, 0.6) 0%, transparent 65%),
+    radial-gradient(circle at 15% 45%, rgba(135, 105, 75, 0.22) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 70%, rgba(125, 95, 65, 0.2) 0%, transparent 55%),
+    linear-gradient(180deg, #d8c7a8 0%, #cebc9b 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
 /* Custom Scrollbars for vintage feel */
 ::-webkit-scrollbar {
   width: 6px;
