@@ -1,0 +1,600 @@
+/* ==========================================================================
+   EnvelopeLanding.css — Realistic 3D Animated Paper Envelope Landing Page
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   STAGE CONTAINER
+   -------------------------------------------------------------------------- */
+.envelope-landing-stage {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  min-height: clamp(380px, 60vh, 620px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1800px;
+}
+
+/* --------------------------------------------------------------------------
+   ENVELOPE RIG & IDLE FLOATING ANIMATION
+   -------------------------------------------------------------------------- */
+.envelope-motion-rig {
+  position: relative;
+  width: min(92vw, 560px);
+  height: clamp(260px, calc(min(92vw, 560px) * 0.65), 364px);
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* When revealed: rig smoothly expands to full width and releases constraints */
+.envelope-motion-rig.revealed {
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Continuous pre-click floating and impatient wiggle keyframes */
+.envelope-motion-rig.closed {
+  animation: envelopeIdleFloat 9s ease-in-out infinite;
+}
+
+.envelope-motion-rig.opening {
+  animation: envelopeExcitedShake 0.25s ease-in-out forwards;
+}
+
+@keyframes envelopeIdleFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  14% {
+    transform: translateY(-9px) rotate(0.9deg);
+  }
+  28% {
+    transform: translateY(4px) rotate(-0.7deg);
+  }
+  42% {
+    transform: translateY(-6px) rotate(0.5deg);
+  }
+  /* Impatient quick eager wiggle at ~50% */
+  49% {
+    transform: translateY(-3px) rotate(-2.4deg);
+  }
+  51% {
+    transform: translateY(-5px) rotate(2.4deg);
+  }
+  53% {
+    transform: translateY(-3px) rotate(-1.6deg);
+  }
+  55% {
+    transform: translateY(-4px) rotate(1.4deg);
+  }
+  57% {
+    transform: translateY(-3px) rotate(0deg);
+  }
+  70% {
+    transform: translateY(5px) rotate(-0.6deg);
+  }
+  /* Playful little tilt at ~82% */
+  81% {
+    transform: translateY(-5px) rotate(1.6deg);
+  }
+  83% {
+    transform: translateY(-6px) rotate(-1.4deg);
+  }
+  85% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes envelopeExcitedShake {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  20% {
+    transform: scale(1.025) rotate(-3deg);
+  }
+  40% {
+    transform: scale(1.035) rotate(3deg);
+  }
+  60% {
+    transform: scale(1.025) rotate(-1.8deg);
+  }
+  80% {
+    transform: scale(1.015) rotate(1.2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   SOFT FLOATING AMBIENT SHADOW
+   -------------------------------------------------------------------------- */
+.envelope-ambient-shadow {
+  position: absolute;
+  bottom: -32px;
+  left: 6%;
+  right: 6%;
+  height: 36px;
+  background: radial-gradient(ellipse at center, rgba(12, 8, 5, 0.6) 0%, rgba(12, 8, 5, 0.28) 45%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(9px);
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.envelope-motion-rig.closed .envelope-ambient-shadow {
+  animation: shadowIdleFloat 9s ease-in-out infinite;
+}
+
+@keyframes shadowIdleFloat {
+  0% {
+    transform: scale(1);
+    opacity: 0.48;
+  }
+  14% {
+    transform: scale(0.93);
+    opacity: 0.35;
+  }
+  28% {
+    transform: scale(1.04);
+    opacity: 0.52;
+  }
+  42% {
+    transform: scale(0.95);
+    opacity: 0.38;
+  }
+  49%, 57% {
+    transform: scale(0.98);
+    opacity: 0.44;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 0.54;
+  }
+  81%, 85% {
+    transform: scale(0.96);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.48;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ENVELOPE 3D BODY & LAYERING
+   -------------------------------------------------------------------------- */
+.envelope-paper-layers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  border-radius: 6px;
+}
+
+.envelope-front-pocket-rig {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Layer 1: Envelope Back Sheet */
+.envelope-back-sheet {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(175deg, #eee3ce 0%, #dfd3bd 100%);
+  box-shadow: 
+    inset 0 0 35px rgba(60, 42, 25, 0.22),
+    0 20px 45px -10px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  border: 1px solid rgba(220, 205, 185, 0.6);
+  z-index: 1;
+}
+
+/* Subtle Interior Kraft Paper Grain */
+.envelope-back-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 80%);
+  pointer-events: none;
+}
+
+/* Layer 2: 3D Top Triangular Flap */
+.envelope-top-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 59%;
+  transform-origin: 50% 0%;
+  transform-style: preserve-3d;
+  z-index: 5;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.envelope-top-flap.open {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.flap-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Flap Outer Face (Seen when closed) */
+.flap-face-outer {
+  background: linear-gradient(180deg, #fbf7ee 0%, #eee3d1 100%);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 6px 9px rgba(35, 22, 12, 0.18));
+}
+
+.flap-face-outer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: radial-gradient(ellipse at 50% 20%, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+}
+
+/* Flap Inner Face (Seen when opened 180deg) */
+.flap-face-inner {
+  background: linear-gradient(180deg, #ede4d3 0%, #ddd0b9 100%);
+  transform: rotateY(180deg);
+  filter: drop-shadow(0 -4px 6px rgba(35, 22, 12, 0.12));
+}
+
+/* Layer 3: Envelope Front Pocket (Left, Right, Bottom Flaps) */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.pocket-flap {
+  position: absolute;
+  inset: 0;
+}
+
+/* Left Flap */
+.pocket-flap-left {
+  width: 53%;
+  height: 100%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  background: linear-gradient(90deg, #f9f4ea 0%, #eae0ce 100%);
+  filter: drop-shadow(2px 0 4px rgba(35, 20, 10, 0.08));
+}
+
+/* Right Flap */
+.pocket-flap-right {
+  left: auto;
+  right: 0;
+  width: 53%;
+  height: 100%;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  background: linear-gradient(270deg, #f9f4ea 0%, #eae0ce 100%);
+  filter: drop-shadow(-2px 0 4px rgba(35, 20, 10, 0.08));
+}
+
+/* Bottom Flap (Overlaps Left & Right flaps) */
+.pocket-flap-bottom {
+  top: auto;
+  bottom: 0;
+  width: 100%;
+  height: 61%;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  background: linear-gradient(0deg, #fcf8f0 0%, #ede3d2 100%);
+  filter: drop-shadow(0 -5px 8px rgba(35, 20, 10, 0.14));
+}
+
+/* Layer 4: The Postcard Carrier inside the envelope */
+.envelope-postcard-carrier {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 880px;
+  max-width: 880px;
+  aspect-ratio: 1.5 / 1;
+  z-index: 2; /* Tucked between back sheet and pocket */
+  transform-origin: center center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Postcard in closed state: tucked neatly inside pocket */
+.envelope-postcard-carrier.closed {
+  transform: translate(-50%, -50%) scale(0.60) translateY(14px);
+  opacity: 1;
+}
+
+/* Postcard in opening state: slides up and expands */
+.envelope-postcard-carrier.opening {
+  animation: postcardEmergeAndCenter 1.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Postcard in revealed state: centered and interactive */
+.envelope-postcard-carrier.revealed {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  width: 100%;
+  max-width: 880px;
+  z-index: 10;
+  pointer-events: auto;
+  animation: postcardSettleIn 0.3s ease-out;
+}
+
+@keyframes postcardSettleIn {
+  from {
+    opacity: 0.95;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes postcardEmergeAndCenter {
+  /* 0% to 25%: waits while seal pops and flap opens */
+  0% {
+    transform: translate(-50%, -50%) scale(0.60) translateY(14px);
+    z-index: 2;
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(0.60) translateY(14px);
+    z-index: 2;
+  }
+  /* 25% to 55%: slides straight up out of pocket */
+  55% {
+    transform: translate(-50%, -50%) scale(0.68) translateY(-240px);
+    z-index: 2;
+  }
+  /* 56%: lifts in front of pocket flaps */
+  56% {
+    z-index: 20;
+    transform: translate(-50%, -50%) scale(0.70) translateY(-240px);
+  }
+  /* 56% to 100%: swoops into center stage and scales to full size with gentle bounce */
+  85% {
+    transform: translate(-50%, -50%) scale(1.02) translateY(-4px);
+    z-index: 20;
+  }
+  94% {
+    transform: translate(-50%, -50%) scale(0.995) translateY(2px);
+    z-index: 20;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.0) translateY(0);
+    z-index: 20;
+  }
+}
+
+/* Envelope fades out and drops as card takes center stage */
+.envelope-paper-layers.fade-out,
+.envelope-front-pocket-rig.fade-out {
+  animation: envelopeDisappear 0.65s 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.envelope-ambient-shadow.fade-out {
+  animation: shadowDisappear 0.65s 0.95s ease forwards;
+}
+
+@keyframes envelopeDisappear {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(75px) scale(0.88);
+    pointer-events: none;
+  }
+}
+
+@keyframes shadowDisappear {
+  0% {
+    opacity: 0.48;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PURPLE WAX SEAL BUTTON & GRAPHIC
+   -------------------------------------------------------------------------- */
+.envelope-seal-anchor {
+  position: absolute;
+  left: 50%;
+  top: 57%;
+  transform: translate(-50%, -50%);
+  z-index: 6; /* In front of top flap */
+  pointer-events: auto;
+}
+
+.wax-seal-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wax-seal-button:hover:not(:disabled) {
+  transform: scale(1.09) rotate(-1deg);
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.6));
+}
+
+.wax-seal-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.wax-seal-button:focus-visible {
+  outline: 3px solid #d8b4fe;
+  outline-offset: 5px;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+}
+
+.wax-seal-button:disabled {
+  cursor: default;
+}
+
+/* Wax seal break animation when opening */
+.wax-seal-button.breaking {
+  animation: waxSealBreak 0.32s ease-out forwards;
+}
+
+@keyframes waxSealBreak {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  35% {
+    transform: scale(1.32) rotate(6deg);
+    opacity: 0.95;
+    filter: brightness(1.25);
+  }
+  100% {
+    transform: scale(0.05) rotate(18deg);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Wax Seal SVG Dimensions */
+.wax-seal-svg {
+  width: clamp(58px, 12vw, 72px);
+  height: clamp(58px, 12vw, 72px);
+  filter: drop-shadow(0 5px 12px rgba(25, 5, 35, 0.55));
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   HINT / INVITATION TEXT BELOW ENVELOPE
+   -------------------------------------------------------------------------- */
+.envelope-invitation-hint {
+  position: absolute;
+  bottom: -48px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: rgba(232, 216, 190, 0.72) !important;
+  text-shadow: none !important;
+  user-select: none;
+  pointer-events: none;
+  animation: hintBreathe 3s ease-in-out infinite;
+}
+
+@keyframes hintBreathe {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN ADAPTATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .envelope-motion-rig {
+    width: 90vw;
+    height: calc(90vw * 0.65);
+  }
+  
+  .envelope-postcard-carrier.closed {
+    transform: translate(-50%, -50%) scale(0.56) translateY(12px);
+  }
+  
+  .wax-seal-svg {
+    width: 54px;
+    height: 54px;
+  }
+  
+  .envelope-invitation-hint {
+    bottom: -40px;
+    font-size: 11px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ACCESSIBILITY: REDUCED MOTION PREFERENCES
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .envelope-motion-rig.closed {
+    animation: none !important;
+  }
+  
+  .envelope-motion-rig.closed .envelope-ambient-shadow {
+    animation: none !important;
+  }
+  
+  .envelope-invitation-hint {
+    animation: none !important;
+  }
+  
+  .wax-seal-button.breaking {
+    animation: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.1s linear !important;
+  }
+  
+  .envelope-top-flap.open {
+    transform: rotateX(180deg) !important;
+    transition: transform 0.2s ease !important;
+  }
+  
+  .envelope-postcard-carrier.opening {
+    animation: none !important;
+    transform: translate(-50%, -50%) scale(1) translateY(0) !important;
+    transition: opacity 0.3s ease !important;
+    z-index: 20 !important;
+  }
+  
+  .envelope-paper-layers.fade-out,
+  .envelope-front-pocket-rig.fade-out {
+    animation: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease !important;
+  }
+}
