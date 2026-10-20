@@ -52,13 +52,13 @@ export function Navbar({ currentApp, title = "React Monorepo" }: NavbarProps): J
             {title}
           </span>
           <Badge variant={isWeb ? "blue" : "purple"}>
-            {isWeb ? "apps/web (Port 3000)" : "apps/app (Port 3001)"}
+            {isWeb ? "apps/web" : "apps/app"}
           </Badge>
         </div>
 
         <nav style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <a
-            href={isWeb ? "#architecture" : "http://localhost:3000"}
+            href={isWeb ? "#architecture" : "/"}
             style={{
               fontSize: "14px",
               opacity: isWeb ? 0.9 : 0.6,
@@ -66,10 +66,10 @@ export function Navbar({ currentApp, title = "React Monorepo" }: NavbarProps): J
               textDecoration: "none",
             }}
           >
-            {isWeb ? "Architecture" : "← Public Site (:3000)"}
+            {isWeb ? "Architecture" : "← Public Site"}
           </a>
           <a
-            href={isWeb ? "http://localhost:3001" : "#dashboard"}
+            href={isWeb ? "/dashboard" : "#dashboard"}
             style={{
               fontSize: "14px",
               opacity: isWeb ? 0.6 : 0.9,
@@ -80,7 +80,7 @@ export function Navbar({ currentApp, title = "React Monorepo" }: NavbarProps): J
               borderRadius: "6px",
             }}
           >
-            {isWeb ? "Launch App (:3001) →" : "Dashboard"}
+            {isWeb ? "Launch App →" : "Dashboard"}
           </a>
         </nav>
       </div>

@@ -92,7 +92,7 @@ export default function AppPage() {
 
           <div style={{ marginTop: "auto", borderTop: "1px solid rgba(128, 128, 128, 0.15)", paddingTop: "16px" }}>
             <a
-              href="http://localhost:3000"
+              href="/"
               style={{
                 display: "block",
                 padding: "8px 12px",
@@ -101,7 +101,7 @@ export default function AppPage() {
                 textDecoration: "none",
               }}
             >
-              ← Return to Web (:3000)
+              ← Return to Web
             </a>
           </div>
         </aside>
