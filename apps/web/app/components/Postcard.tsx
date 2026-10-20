@@ -62,9 +62,9 @@ const DEFAULT_MESSAGE =
   "p.s. - click the stamp to change it, there's a surprise <3";
 
 const DEFAULT_FROM = "Aarav";
-const DEFAULT_ADDRESS_1 = "To: The Curious Explorer";
-const DEFAULT_ADDRESS_2 = "Via: React Web / App Monorepo";
-const DEFAULT_ADDRESS_3 = "Loc: github.com/aarav-10n/sanya";
+const DEFAULT_ADDRESS_1 = "To: Sanya";
+const DEFAULT_ADDRESS_2 = "Via: My purest intentions";
+const DEFAULT_ADDRESS_3 = "Loc: Bangalore, Ind";
 
 const DEFAULT_BACK_MESSAGE =
   "I want to start by apologising. I'm not just saying it for the sake of it, but I genuinely mean it. I never should have yelled at you or over reacted so much unnecessarily. I could have been more understanding and I know that there are somethings that you can't control. It made me feel horrible that you had to relate what happened to your past relationship and I will never let that happen again. You mean the world to me, and I never want you to feel hurt because of me ever again. When you went silent and didn't want to talk anymore, I regretted doing everything I did. I am genuinely very sorry, I'll never do it again.\n\n" +
@@ -332,14 +332,15 @@ export default function Postcard({
           </div>
 
           {/* ---------------------------------------------------------- */}
-          {/* RIGHT SIDE: 4 Horizontal Address Lines with crisp underlines */}
+          {/* ---------------------------------------------------------- */}
+          {/* RIGHT SIDE: 3 Horizontal Address Lines with crisp underlines */}
           {/* ---------------------------------------------------------- */}
           {/* Line 1 */}
           <div
             style={{
               position: "absolute",
               left: "56.6%",
-              top: "40.5%",
+              top: "43.5%",
               width: "34.3%",
               height: "5.5%",
               display: "flex",
@@ -360,6 +361,7 @@ export default function Postcard({
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                 lineHeight: 1,
+                whiteSpace: "nowrap",
               }}
             >
               {addressLine1}
@@ -371,7 +373,7 @@ export default function Postcard({
             style={{
               position: "absolute",
               left: "56.6%",
-              top: "48.8%",
+              top: "52.5%",
               width: "34.3%",
               height: "5.5%",
               display: "flex",
@@ -392,6 +394,7 @@ export default function Postcard({
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                 lineHeight: 1,
+                whiteSpace: "nowrap",
               }}
             >
               {addressLine2}
@@ -403,7 +406,7 @@ export default function Postcard({
             style={{
               position: "absolute",
               left: "56.6%",
-              top: "57.2%",
+              top: "61.5%",
               width: "34.3%",
               height: "5.5%",
               display: "flex",
@@ -424,26 +427,12 @@ export default function Postcard({
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                 lineHeight: 1,
+                whiteSpace: "nowrap",
               }}
             >
               {addressLine3}
             </span>
           </div>
-
-          {/* Line 4: Blank address line */}
-          <div
-            style={{
-              position: "absolute",
-              left: "56.6%",
-              top: "65.5%",
-              width: "34.3%",
-              height: "5.5%",
-              display: "flex",
-              alignItems: "flex-end",
-              borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
-              paddingBottom: "2px",
-            }}
-          />
         </div>
 
         {/* ============================================================== */}
