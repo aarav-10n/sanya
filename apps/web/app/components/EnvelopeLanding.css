@@ -441,7 +441,7 @@
 .envelope-seal-anchor {
   position: absolute;
   left: 50%;
-  top: 59%;
+  top: 60.5%;
   transform: translate(-50%, -50%);
   z-index: 7; /* On top of closed top flap */
   pointer-events: auto;
@@ -465,7 +465,7 @@
 
 .wax-seal-button:hover:not(:disabled) {
   transform: scale(1.09) rotate(-1deg);
-  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.6));
+  filter: drop-shadow(0 0 16px rgba(220, 38, 38, 0.65));
 }
 
 .wax-seal-button:active:not(:disabled) {
@@ -473,9 +473,9 @@
 }
 
 .wax-seal-button:focus-visible {
-  outline: 3px solid #d8b4fe;
+  outline: 3px solid #f87171;
   outline-offset: 5px;
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
 }
 
 .wax-seal-button:disabled {
@@ -504,12 +504,17 @@
   }
 }
 
-/* Wax Seal SVG Dimensions */
+/* Red Wax Seal Image Dimensions & Aesthetics */
+.wax-seal-image,
 .wax-seal-svg {
-  width: clamp(58px, 12vw, 72px);
-  height: clamp(58px, 12vw, 72px);
-  filter: drop-shadow(0 5px 12px rgba(25, 5, 35, 0.55));
+  width: clamp(78px, 16vw, 98px);
+  height: clamp(78px, 16vw, 98px);
+  object-fit: contain;
+  filter: drop-shadow(0 7px 16px rgba(45, 10, 10, 0.58)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -660,9 +665,10 @@
     transform: translate(-50%, -50%) scale(0.53) translateY(6px);
   }
   
+  .wax-seal-image,
   .wax-seal-svg {
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 58px;
   }
   
   .envelope-invitation-hint {

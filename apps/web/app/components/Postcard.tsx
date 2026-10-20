@@ -422,7 +422,7 @@ export default function Postcard({
             </span>
           </div>
 
-          {/* Line 4: Clickable portal link to app dashboard */}
+          {/* Line 4: Blank address line */}
           <div
             style={{
               position: "absolute",
@@ -435,29 +435,7 @@ export default function Postcard({
               borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
               paddingBottom: "2px",
             }}
-          >
-            <a
-              href="http://localhost:3001"
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              className="typewriter-ink"
-              style={{
-                fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-                fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                fontWeight: 700,
-                color: "#8b261e !important",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                letterSpacing: "0.04em",
-                textShadow:
-                  "0 0 0.8px rgba(139, 38, 30, 0.45), 0.3px 0.3px 0px rgba(139, 38, 30, 0.25) !important",
-              }}
-            >
-              <span>→ Launch App (Port 3001)</span>
-            </a>
-          </div>
+          />
         </div>
 
         {/* ============================================================== */}
