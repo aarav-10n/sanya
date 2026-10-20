@@ -55,21 +55,29 @@ export const STAMP_COLLECTION = [
 ];
 
 const DEFAULT_MESSAGE =
-  "Dearest Traveler,\n\n" +
-  "Welcome to Sanya — crafted with timeless aesthetic care and modern React code.\n\n" +
-  "Every line here represents a shared component, every stamp a connected app in our Turborepo.\n\n" +
-  "May your journeys through this code be swift and inspiring.";
+  "sanu,\n\n" +
+  "i spent the whole night regretting what i did and i never would want to repeat the same mistake again.\n" +
+  "this is to make sure that you know, that i never want to intentionally hurt you and not make you regret anything.\n" +
+  "tap to flip the card.\n\n" +
+  "p.s. - click the stamp to change it, there's a surprise <3";
 
-const DEFAULT_FROM = "Aarav & Sanya";
+const DEFAULT_FROM = "Aarav";
 const DEFAULT_ADDRESS_1 = "To: The Curious Explorer";
 const DEFAULT_ADDRESS_2 = "Via: React Web / App Monorepo";
 const DEFAULT_ADDRESS_3 = "Loc: github.com/aarav-10n/sanya";
 
 const DEFAULT_BACK_MESSAGE =
-  "Postscript from Sanya:\n\n" +
-  "Every great idea begins with a clean sheet of paper. Here on the reverse of the card, thoughts flow without borders or constraints.\n\n" +
-  "The typography matches the front letter in every detail — stamped in vintage typewriter ribbon ink directly into the paper fibers.\n\n" +
-  "— Sanya Studio, 2026";
+  "I want to start by apologising. I'm not just saying it for the sake of it, but I genuinely mean it. I never should have yelled at you or over reacted so much unnecessarily. I could have been more understanding and I know that there are somethings that you can't control. It made me feel horrible that you had to relate what happened to your past relationship and I will never let that happen again. You mean the world to me, and I never want you to feel hurt because of me ever again. When you went silent and didn't want to talk anymore, I regretted doing everything I did. I am genuinely very sorry, I'll never do it again.\n\n" +
+  "Just to make sure I don't do shit like this again, I'm gonna make a few promises and you have full rights to hold me accountable to these (pinky promise):\n" +
+  "1. I promise to never yell at you ever ever again.\n" +
+  "2. I promise that I won't over react again.\n" +
+  "3. I promise to fix these issues once and for all.\n" +
+  "4. I promise that you'll never have to get reminded of your past relationship again.\n" +
+  "5. I promise that we'll never go to sleep mad at each other.\n" +
+  "6. I promise that I'll always take care of you.\n" +
+  "7. I promise that I'll never break your trust again.\n\n" +
+  "I love you,\n" +
+  "Aarav <3";
 
 interface PostcardProps {
   isInteractive?: boolean;
@@ -202,13 +210,13 @@ export default function Postcard({
             style={{
               position: "absolute",
               left: "4.8%",
-              top: "18%",
-              width: "41.5%",
+              top: "17%",
+              width: "43%",
               fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-              fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-              lineHeight: 1.5,
+              fontSize: "clamp(0.64rem, 1.28vw, 0.90rem)",
+              lineHeight: 1.55,
               color: "#271f18",
-              letterSpacing: "0.04em",
+              letterSpacing: "0.035em",
               textShadow:
                 "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
               whiteSpace: "pre-wrap",
@@ -471,20 +479,21 @@ export default function Postcard({
             className="typewriter-ink"
             style={{
               position: "absolute",
-              left: "7.5%",
-              top: "10%",
-              right: "7.5%",
-              bottom: "10%",
+              left: "6.8%",
+              top: "7%",
+              right: "6.8%",
+              bottom: "7%",
               fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-              fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-              lineHeight: 1.6,
+              fontSize: "clamp(0.60rem, 1.18vw, 0.88rem)",
+              lineHeight: 1.55,
               color: "#271f18",
-              letterSpacing: "0.04em",
+              letterSpacing: "0.035em",
               textShadow:
                 "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
               whiteSpace: "pre-wrap",
               userSelect: "none",
               pointerEvents: "none",
+              overflowY: "auto",
             }}
           >
             {backMessage}
