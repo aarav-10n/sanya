@@ -54,32 +54,46 @@ export const STAMP_COLLECTION = [
   },
 ];
 
+const DEFAULT_MESSAGE =
+  "Dearest Traveler,\n\n" +
+  "Welcome to Sanya — crafted with timeless aesthetic care and modern React code.\n\n" +
+  "Every line here represents a shared component, every stamp a connected app in our Turborepo.\n\n" +
+  "May your journeys through this code be swift and inspiring.";
+
+const DEFAULT_FROM = "Aarav & Sanya";
+const DEFAULT_ADDRESS_1 = "To: The Curious Explorer";
+const DEFAULT_ADDRESS_2 = "Via: React Web / App Monorepo";
+const DEFAULT_ADDRESS_3 = "Loc: github.com/aarav-10n/sanya";
+
+const DEFAULT_BACK_MESSAGE =
+  "Postscript from Sanya:\n\n" +
+  "Every great idea begins with a clean sheet of paper. Here on the reverse of the card, thoughts flow without borders or constraints.\n\n" +
+  "The typography matches the front letter in every detail — stamped in vintage typewriter ribbon ink directly into the paper fibers.\n\n" +
+  "— Sanya Studio, 2026";
+
 interface PostcardProps {
   isInteractive?: boolean;
   className?: string;
+  message?: string;
+  fromName?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  addressLine3?: string;
+  backMessage?: string;
 }
 
-export default function Postcard({ isInteractive = true, className = "" }: PostcardProps) {
+export default function Postcard({
+  isInteractive = true,
+  className = "",
+  message = DEFAULT_MESSAGE,
+  fromName = DEFAULT_FROM,
+  addressLine1 = DEFAULT_ADDRESS_1,
+  addressLine2 = DEFAULT_ADDRESS_2,
+  addressLine3 = DEFAULT_ADDRESS_3,
+  backMessage = DEFAULT_BACK_MESSAGE,
+}: PostcardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [stampIndex, setStampIndex] = useState(0);
-
-  // Editable text states
-  const [message, setMessage] = useState(
-    "Dearest Traveler,\n\n" +
-    "Welcome to Sanya — crafted with timeless aesthetic care and modern React code.\n\n" +
-    "Every line here represents a shared component, every stamp a connected app in our Turborepo.\n\n" +
-    "May your journeys through this code be swift and inspiring."
-  );
-  const [fromName, setFromName] = useState("Aarav & Sanya");
-  const [addressLine1, setAddressLine1] = useState("To: The Curious Explorer");
-  const [addressLine2, setAddressLine2] = useState("Via: React Web / App Monorepo");
-  const [addressLine3, setAddressLine3] = useState("Loc: github.com/aarav-10n/sanya");
-  const [backMessage, setBackMessage] = useState(
-    "Postscript from Sanya:\n\n" +
-    "Every great idea begins with a clean sheet of paper. Here on the reverse of the card, thoughts flow without borders or constraints.\n\n" +
-    "You can write and edit this text freely. The typography matches the front letter in every detail — stamped in vintage typewriter ribbon ink directly into the paper fibers.\n\n" +
-    "— Sanya Studio, 2026"
-  );
 
   const cardInnerRef = useRef<HTMLDivElement>(null);
 
@@ -181,57 +195,35 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
           />
 
           {/* ---------------------------------------------------------- */}
-          {/* LEFT SIDE: Directly editable typewriter letter             */}
+          {/* LEFT SIDE: Typewriter letter (Permanent Typography)        */}
           {/* ---------------------------------------------------------- */}
           <div
+            className="typewriter-ink"
             style={{
               position: "absolute",
               left: "4.8%",
               top: "18%",
               width: "41.5%",
-              height: "66%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
+              fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
+              fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+              lineHeight: 1.5,
+              color: "#271f18",
+              letterSpacing: "0.04em",
+              textShadow:
+                "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
+              whiteSpace: "pre-wrap",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
-            <textarea
-              value={message}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setMessage(e.target.value);
-                playTypewriterSound();
-              }}
-              placeholder="Click here to type your letter..."
-              spellCheck={false}
-              className="typewriter-ink"
-              style={{
-                width: "100%",
-                height: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
-                resize: "none",
-                fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-                fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                lineHeight: 1.5,
-                color: "#271f18",
-                letterSpacing: "0.04em",
-                textShadow:
-                  "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
-                overflowY: "auto",
-                padding: 0,
-                margin: 0,
-                cursor: isInteractive ? "text" : "default",
-              }}
-            />
+            {message}
           </div>
 
           {/* ---------------------------------------------------------- */}
-          {/* BOTTOM LEFT: "FROM:" Text + Input                          */}
+          {/* BOTTOM LEFT: "FROM:" Text + Signature                      */}
           {/* ---------------------------------------------------------- */}
           <div
+            className="typewriter-ink"
             style={{
               position: "absolute",
               left: "4.8%",
@@ -239,38 +231,24 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
               width: "41.5%",
               display: "flex",
               alignItems: "baseline",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
             <span
-              className="typewriter-ink"
               style={{
                 fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
                 fontWeight: 700,
                 letterSpacing: "0.2em",
                 color: "#271f18",
-                marginRight: "6px",
-                userSelect: "none",
+                marginRight: "8px",
                 flexShrink: 0,
               }}
             >
               F R O M :
             </span>
-            <input
-              type="text"
-              value={fromName}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setFromName(e.target.value);
-                playTypewriterSound();
-              }}
-              placeholder="Your Name / Signature"
-              className="typewriter-ink"
+            <span
               style={{
-                width: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
                 color: "#271f18",
@@ -278,12 +256,11 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
                 fontWeight: 400,
-                cursor: isInteractive ? "text" : "default",
-                padding: 0,
-                margin: 0,
                 lineHeight: 1,
               }}
-            />
+            >
+              {fromName}
+            </span>
           </div>
 
           {/* ---------------------------------------------------------- */}
@@ -361,35 +338,24 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
               alignItems: "flex-end",
               borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
               paddingBottom: "2px",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
-            <input
-              type="text"
-              value={addressLine1}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setAddressLine1(e.target.value);
-                playTypewriterSound();
-              }}
+            <span
               className="typewriter-ink"
               style={{
-                width: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
                 color: "#271f18",
                 letterSpacing: "0.04em",
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
-                cursor: isInteractive ? "text" : "default",
-                padding: 0,
-                margin: 0,
                 lineHeight: 1,
               }}
-            />
+            >
+              {addressLine1}
+            </span>
           </div>
 
           {/* Line 2 */}
@@ -404,35 +370,24 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
               alignItems: "flex-end",
               borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
               paddingBottom: "2px",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
-            <input
-              type="text"
-              value={addressLine2}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setAddressLine2(e.target.value);
-                playTypewriterSound();
-              }}
+            <span
               className="typewriter-ink"
               style={{
-                width: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
                 color: "#271f18",
                 letterSpacing: "0.04em",
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
-                cursor: isInteractive ? "text" : "default",
-                padding: 0,
-                margin: 0,
                 lineHeight: 1,
               }}
-            />
+            >
+              {addressLine2}
+            </span>
           </div>
 
           {/* Line 3 */}
@@ -447,35 +402,24 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
               alignItems: "flex-end",
               borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
               paddingBottom: "2px",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
-            <input
-              type="text"
-              value={addressLine3}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setAddressLine3(e.target.value);
-                playTypewriterSound();
-              }}
+            <span
               className="typewriter-ink"
               style={{
-                width: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
                 color: "#271f18",
                 letterSpacing: "0.04em",
                 textShadow:
                   "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
-                cursor: isInteractive ? "text" : "default",
-                padding: 0,
-                margin: 0,
                 lineHeight: 1,
               }}
-            />
+            >
+              {addressLine3}
+            </span>
           </div>
 
           {/* Line 4: Clickable portal link to app dashboard */}
@@ -517,7 +461,7 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
         </div>
 
         {/* ============================================================== */}
-        {/* POSTCARD BACK: Exact matching vintage paper with editable body */}
+        {/* POSTCARD BACK: Exact matching vintage paper with text body     */}
         {/* ============================================================== */}
         <div
           className="postcard-face postcard-front"
@@ -544,49 +488,28 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
             }}
           />
 
-          {/* Full Editable Text Body */}
+          {/* Full Permanent Text Body */}
           <div
+            className="typewriter-ink"
             style={{
               position: "absolute",
               left: "7.5%",
               top: "10%",
               right: "7.5%",
               bottom: "10%",
-              display: "flex",
-              flexDirection: "column",
+              fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
+              fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
+              lineHeight: 1.6,
+              color: "#271f18",
+              letterSpacing: "0.04em",
+              textShadow:
+                "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
+              whiteSpace: "pre-wrap",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
-            <textarea
-              value={backMessage}
-              tabIndex={isInteractive ? 0 : -1}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => {
-                setBackMessage(e.target.value);
-                playTypewriterSound();
-              }}
-              placeholder="Click here to type your notes or story..."
-              spellCheck={false}
-              className="typewriter-ink"
-              style={{
-                width: "100%",
-                height: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
-                resize: "none",
-                fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
-                fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
-                lineHeight: 1.6,
-                color: "#271f18",
-                letterSpacing: "0.04em",
-                textShadow:
-                  "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
-                overflowY: "auto",
-                padding: 0,
-                margin: 0,
-                cursor: isInteractive ? "text" : "default",
-              }}
-            />
+            {backMessage}
           </div>
         </div>
       </div>
@@ -608,7 +531,7 @@ export default function Postcard({ isInteractive = true, className = "" }: Postc
       >
         {isFlipped
           ? "✦ Tap postcard to flip back to letter"
-          : "✦ Tap card to flip • Click stamp to change • Click text to edit"}
+          : "✦ Tap card to flip • Click stamp to change"}
       </div>
     </div>
   );
