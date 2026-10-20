@@ -107,7 +107,7 @@ export default function PostcardLandingPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "80px 16px 40px 16px",
+        padding: "24px 16px",
         position: "relative",
         overflow: "hidden",
       }}
@@ -144,79 +144,6 @@ export default function PostcardLandingPage() {
           }}
         />
       </div>
-
-      {/* Top Vintage Navigation Header */}
-      <header
-        className="desk-header"
-        style={{
-          position: "absolute",
-          top: "16px",
-          left: "16px",
-          right: "16px",
-          maxWidth: "1050px",
-          margin: "0 auto",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "12px 20px",
-          background: "rgba(35, 27, 22, 0.75)",
-          border: "1px solid rgba(190, 150, 100, 0.2)",
-          borderRadius: "8px",
-          backdropFilter: "blur(8px)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
-          zIndex: 30,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <span style={{ fontSize: "20px" }}>✉️</span>
-          <div>
-            <h1
-              className="typewriter-ink"
-              style={{
-                fontSize: "15px",
-                letterSpacing: "0.2em",
-                color: "#e8d8be !important",
-                textShadow: "none !important",
-                margin: 0,
-                textTransform: "uppercase",
-              }}
-            >
-              Postal Bureau • Sanya Studio
-            </h1>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "11px",
-                color: "rgba(232, 216, 190, 0.6)",
-                fontFamily: "var(--font-special-elite), monospace",
-              }}
-            >
-              Monorepo Public Web • Port 3000
-            </p>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <a
-            href="http://localhost:3001"
-            className="typewriter-ink"
-            style={{
-              fontSize: "13px",
-              padding: "7px 16px",
-              borderRadius: "4px",
-              backgroundColor: "rgba(180, 70, 50, 0.85)",
-              color: "#fff !important",
-              textShadow: "none !important",
-              border: "1px solid rgba(255, 200, 180, 0.3)",
-              transition: "all 0.2s ease",
-              boxShadow: "0 2px 8px rgba(180, 70, 50, 0.4)",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Launch App Console (:3001) →
-          </a>
-        </div>
-      </header>
 
       {/* Main Postcard Showcase */}
       <main
@@ -345,7 +272,7 @@ export default function PostcardLandingPage() {
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* BOTTOM LEFT: CRISP "FROM:" Text + Underline + Input        */}
+              {/* BOTTOM LEFT: "FROM:" Text + Input                          */}
               {/* ---------------------------------------------------------- */}
               <div
                 style={{
@@ -355,8 +282,6 @@ export default function PostcardLandingPage() {
                   width: "41.5%",
                   display: "flex",
                   alignItems: "baseline",
-                  borderBottom: "1.5px solid rgba(39, 31, 24, 0.85)",
-                  paddingBottom: "1px",
                 }}
               >
                 <span
