@@ -653,7 +653,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   RESPONSIVE DESIGN ADAPTATIONS
+   RESPONSIVE DESIGN ADAPTATIONS (MOBILE ONLY — LAPTOP VIEW COMPLETELY PRESERVED)
    -------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .envelope-motion-rig {
@@ -661,8 +661,20 @@
     height: calc(90vw * 0.66);
   }
   
+  /* Postcard Carrier inside mobile envelope rig */
+  .envelope-motion-rig .envelope-postcard-carrier {
+    width: min(90vw, 360px) !important;
+    max-width: min(90vw, 360px) !important;
+  }
+  
+  /* Perfectly tucked inside envelope on mobile: zero peeking */
   .envelope-postcard-carrier.closed {
-    transform: translate(-50%, -50%) scale(0.53) translateY(6px);
+    transform: translate(-50%, -50%) scale(0.80) translateY(12px) !important;
+  }
+  
+  /* Mobile emergence animation: clears envelope without flying out of screen */
+  .envelope-postcard-carrier.opening {
+    animation: postcardEmergeAndCenterMobile 1.9s linear forwards !important;
   }
   
   .wax-seal-image,
@@ -675,6 +687,104 @@
     bottom: -40px;
     font-size: 11px;
   }
+
+  /* Front side mobile typography: prevent overlap with signature */
+  .postcard-front-message {
+    top: 14% !important;
+    bottom: 14% !important;
+    font-size: clamp(0.44rem, 2.05vw, 0.62rem) !important;
+    line-height: 1.32 !important;
+    max-height: 68% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .postcard-from-signature {
+    bottom: 4% !important;
+  }
+  
+  .postcard-from-label,
+  .postcard-from-name {
+    font-size: clamp(0.48rem, 2.2vw, 0.68rem) !important;
+  }
+  
+  .postcard-address-text {
+    font-size: clamp(0.48rem, 2.2vw, 0.68rem) !important;
+  }
+
+  /* Back side mobile typography: comfortable font size & fully scrollable */
+  .postcard-back-message {
+    left: 5% !important;
+    top: 5% !important;
+    right: 5% !important;
+    bottom: 5% !important;
+    font-size: clamp(0.50rem, 2.3vw, 0.68rem) !important;
+    line-height: 1.4 !important;
+    padding-right: 6px !important;
+  }
+}
+
+/* Dedicated mobile emergence keyframes staying safely inside phone frame */
+@keyframes postcardEmergeAndCenterMobile {
+  /* 0% to 22%: holds inside pocket while envelope shakes, seal pops, flap opens */
+  0% {
+    transform: translate(-50%, -50%) scale(0.80) translateY(12px);
+    z-index: 2;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  22% {
+    transform: translate(-50%, -50%) scale(0.80) translateY(12px);
+    z-index: 2;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  /* 22% to 62%: slides UP just enough to clear envelope top (staying well in screen frame) */
+  62% {
+    transform: translate(-50%, -50%) scale(0.80) translateY(-165px);
+    z-index: 2;
+    animation-timing-function: step-end;
+  }
+  /* 62.5%: bottom edge has completely cleared envelope; elevate stacking order */
+  62.5% {
+    transform: translate(-50%, -50%) scale(0.83) translateY(-165px);
+    z-index: 25;
+    animation-timing-function: cubic-bezier(0.25, 1, 0.35, 1);
+  }
+  /* 62.5% to 88%: descends towards viewer, settling into center stage */
+  88% {
+    transform: translate(-50%, -50%) scale(1.02) translateY(-4px);
+    z-index: 25;
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* 88% to 100%: subtle satisfying spring bounce settling into center */
+  95% {
+    transform: translate(-50%, -50%) scale(0.995) translateY(2px);
+    z-index: 25;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.0) translateY(0);
+    z-index: 25;
+  }
+}
+
+/* Vintage ink scrollbar for scrollable postcard text */
+.postcard-back-message::-webkit-scrollbar,
+.postcard-front-message::-webkit-scrollbar {
+  width: 4px;
+}
+.postcard-back-message::-webkit-scrollbar-track,
+.postcard-front-message::-webkit-scrollbar-track {
+  background: rgba(39, 31, 24, 0.08);
+  border-radius: 4px;
+}
+.postcard-back-message::-webkit-scrollbar-thumb,
+.postcard-front-message::-webkit-scrollbar-thumb {
+  background: rgba(139, 38, 30, 0.45);
+  border-radius: 4px;
+}
+.postcard-back-message::-webkit-scrollbar-thumb:hover,
+.postcard-front-message::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 38, 30, 0.75);
 }
 
 /* --------------------------------------------------------------------------

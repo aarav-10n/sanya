@@ -104,6 +104,8 @@ export default function Postcard({
   const [stampIndex, setStampIndex] = useState(0);
 
   const cardInnerRef = useRef<HTMLDivElement>(null);
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingRef = useRef(false);
 
   // GSAP 3D Rotation Flip — zero layout shift, strictly pivots around 50% 50%
   useEffect(() => {
@@ -117,8 +119,26 @@ export default function Postcard({
     });
   }, [isFlipped]);
 
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    pointerStartRef.current = { x: e.clientX, y: e.clientY };
+    isDraggingRef.current = false;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerStartRef.current) return;
+    const dx = Math.abs(e.clientX - pointerStartRef.current.x);
+    const dy = Math.abs(e.clientY - pointerStartRef.current.y);
+    if (dx > 6 || dy > 6) {
+      isDraggingRef.current = true;
+    }
+  };
+
   const handleCardClick = () => {
     if (!isInteractive) return;
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      return;
+    }
     setIsFlipped((prev) => !prev);
     playTypewriterSound();
   };
@@ -134,6 +154,8 @@ export default function Postcard({
       <div
         ref={cardInnerRef}
         className="postcard-inner"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
         onClick={handleCardClick}
         style={{ cursor: isInteractive ? "pointer" : "default" }}
         title={
@@ -206,7 +228,7 @@ export default function Postcard({
           {/* LEFT SIDE: Typewriter letter (Permanent Typography)        */}
           {/* ---------------------------------------------------------- */}
           <div
-            className="typewriter-ink"
+            className="typewriter-ink postcard-front-message"
             style={{
               position: "absolute",
               left: "4.8%",
@@ -231,7 +253,7 @@ export default function Postcard({
           {/* BOTTOM LEFT: "FROM:" Text + Signature                      */}
           {/* ---------------------------------------------------------- */}
           <div
-            className="typewriter-ink"
+            className="typewriter-ink postcard-from-signature"
             style={{
               position: "absolute",
               left: "4.8%",
@@ -244,6 +266,7 @@ export default function Postcard({
             }}
           >
             <span
+              className="postcard-from-label"
               style={{
                 fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
                 fontWeight: 700,
@@ -256,6 +279,7 @@ export default function Postcard({
               F R O M :
             </span>
             <span
+              className="typewriter-ink postcard-from-name"
               style={{
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.68rem, 1.35vw, 0.92rem)",
@@ -352,7 +376,7 @@ export default function Postcard({
             }}
           >
             <span
-              className="typewriter-ink"
+              className="typewriter-ink postcard-address-text"
               style={{
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
@@ -385,7 +409,7 @@ export default function Postcard({
             }}
           >
             <span
-              className="typewriter-ink"
+              className="typewriter-ink postcard-address-text"
               style={{
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
@@ -418,7 +442,7 @@ export default function Postcard({
             }}
           >
             <span
-              className="typewriter-ink"
+              className="typewriter-ink postcard-address-text"
               style={{
                 fontFamily: "var(--font-special-elite), 'Special Elite', cursive, monospace",
                 fontSize: "clamp(0.65rem, 1.4vw, 0.95rem)",
@@ -465,7 +489,7 @@ export default function Postcard({
 
           {/* Full Permanent Text Body */}
           <div
-            className="typewriter-ink"
+            className="typewriter-ink postcard-back-message"
             style={{
               position: "absolute",
               left: "6.8%",
@@ -480,9 +504,12 @@ export default function Postcard({
               textShadow:
                 "0 0 0.8px rgba(35, 25, 20, 0.45), 0.3px 0.3px 0px rgba(35, 25, 20, 0.25)",
               whiteSpace: "pre-wrap",
-              userSelect: "none",
-              pointerEvents: "none",
+              userSelect: "text",
+              pointerEvents: "auto",
               overflowY: "auto",
+              WebkitOverflowScrolling: "touch",
+              touchAction: "pan-y",
+              overscrollBehavior: "contain",
             }}
           >
             {backMessage}
@@ -506,7 +533,7 @@ export default function Postcard({
         }}
       >
         {isFlipped
-          ? "✦ Tap postcard to flip back to letter"
+          ? "✦ Scroll to read promises • Tap card to flip back"
           : "✦ Tap card to flip • Click stamp to change"}
       </div>
     </div>
