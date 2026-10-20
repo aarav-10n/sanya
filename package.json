@@ -8,6 +8,16 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
+  "packageManager": "npm@11.17.0",
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.0.0"
+    }
+  },
+  "dependencies": {
+    "turbo": "^2.11.9"
+  },
   "devDependencies": {
     "prettier": "3.9.6",
     "turbo": "^2.11.9",
